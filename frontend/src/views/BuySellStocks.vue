@@ -268,7 +268,63 @@
 
       //if sell
       checkSufficientStocks(){
+        this.loading = true
+        console.log(this.customerStocksArr)
+        console.log(this.stocksymbol.symbol)
 
+        var owned = this.customerStocksArr.filter(stock => stock.symbol === this.stocksymbol.symbol)
+
+        //var owned = this.customerStocksArr.filter(stock => stock.symbol === this.stocksymbol)
+        console.log(owned)
+        owned = owned[0].quantity
+
+        if(owned >= this.quantity){
+
+          var headerObj = this.$store.state.headerObj   
+              var contentObj = {}
+
+              contentObj["settlementAccount"] = this.settlementaccount
+              contentObj["symbol"] = this.stocksymbol.symbol
+              contentObj["buyOrSell"] = this.buyorsell
+              contentObj["quantity"] = this.quantity
+
+              if(this.ordertype=="Market"){
+                headerObj["serviceName"] = "placeMarketOrder"   
+              }
+              else{
+                headerObj["serviceName"] = "placeMarketOrder"   
+                contentObj["limitprice"] = this.settlementaccount
+                contentObj["expirationType"] = this.expirationtype
+                contentObj["maturityDate"] = this.maturitydate
+              }
+
+              var header = JSON.stringify(headerObj); 
+              var content = JSON.stringify(contentObj); 
+
+              this.axios.post("http://tbankonline.com/SMUtBank_API/Gateway?Header="+header+"&Content="+content).then((response)=>{
+                  var data = response.data.Content.ServiceResponse
+                  var errorcode = data.ServiceRespHeader.GlobalErrorID
+                  if(errorcode == "010000"){
+                      var orderid = data.StockOrder.orderID
+                      this.modalActive = true
+                      this.modalMessage = this.ordertype + " Order - "+ orderid + " has been successfully created!"
+                  }else{
+                      this.modalActive = true
+                      this.btnActive=false;
+                      this.modalMessage = data.ServiceRespHeader.ErrorDetails
+                  }     
+                }).catch((error)=>{
+                   console.log(error)
+                }).finally(()=>{
+                    this.loading = false
+                })
+        }else{
+          this.loading = false;
+          this.btnActive=false;
+          this.modalMessage = "You only have " + owned + " stocks. That is insufficient!"   
+          this.modalActive = true
+              
+        }
       },
 
       //if buy
@@ -280,7 +336,7 @@
           var header = JSON.stringify(headerObj); 
 
           var contentObj = {
-            "symbol" : this.stocksymbol
+            "symbol" : this.stocksymbol.symbol
           }
           var content = JSON.stringify(contentObj); 
 
@@ -331,6 +387,7 @@
                       this.modalMessage = this.ordertype + " Order - "+ orderid + " has been successfully created!"
                   }else{
                       this.modalActive = true
+                      this.btnActive=false;
                       this.modalMessage = data.ServiceRespHeader.ErrorDetails
                   }     
                 }).catch((error)=>{
@@ -341,6 +398,7 @@
             }else{
               this.loading = false;
               this.modalActive = true
+              this.btnActive=false;
               this.modalMessage = "Insufficient fund!"    
             }  
           })
