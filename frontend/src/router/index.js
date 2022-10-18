@@ -4,6 +4,9 @@ import LoginPage from '../views/LoginPage.vue'
 import UserMain from '../views/UserMain.vue'
 import ViewCustomerStocks from '../views/ViewCustomerStocks.vue'
 import BuySellStocks from '../views/BuySellStocks.vue'
+import PortfolioOptimization from '../views/PortfolioOptimization.vue'
+import CustomerProfile from '../views/CustomerProfile.vue'
+import ViewStockOrder from '../views/ViewStockOrder.vue'
 
 const routes = [
   {
@@ -43,11 +46,39 @@ const routes = [
     }
   },
   {
+    path: "/ViewStockOrder",
+    name: "ViewStockOrder",
+    component: ViewStockOrder,
+    meta: {
+      title: "ViewStockOrder",
+      requiresAuth: false,
+    }
+  },
+  {
     path: "/BuySellStocks",
     name: "BuySellStocks",
     component: BuySellStocks,
     meta: {
       title: "BuySellStocks",
+      requiresAuth: false,
+    }
+  },
+  {
+    path: "/PortfolioOptimization",
+    name: "PortfolioOptimization",
+    component: PortfolioOptimization,
+    meta: {
+      title: "PortfolioOptimization",
+      requiresAuth: false,
+    }
+  },
+
+  {
+    path: "/CustomerProfile",
+    name: "CustomerProfile",
+    component: CustomerProfile,
+    meta: {
+      title: "CustomerProfile",
       requiresAuth: false,
     }
   },

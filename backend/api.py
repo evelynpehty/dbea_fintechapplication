@@ -2,13 +2,13 @@ from pypfopt import EfficientFrontier
 from pypfopt import risk_models
 from pypfopt import expected_returns
 from pypfopt import objective_functions
-from pypfopt.discrete_allocation import DiscreteAllocation, get_latest_prices
+#from pypfopt.discrete_allocation import DiscreteAllocation, get_latest_prices
 
 import pandas as pd
 import numpy as np
 from pandas_datareader import data
 
-from flask import Flask, request, jsonify, json
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -16,7 +16,7 @@ CORS(app)
 
 # Read in price data
 
-@app.route('/getoptimizeportfolio', methods=["GET"])
+@app.route('/getoptimizeportfolio', methods=["POST"])
 def optimize_portfolio():
     
     '''
@@ -33,7 +33,7 @@ def optimize_portfolio():
     start_date = request_data["start_date"]
     end_date = request_data["end_date"]
     tickers = request_data["tickers"]
-    total_portfolio_value = request_data["total_portfolio_value"]
+    #total_portfolio_value = request_data["total_portfolio_value"]
     
 # Use pandas_reader.data.DataReader to load data
     try:
@@ -57,9 +57,9 @@ def optimize_portfolio():
         annual_volatility = portfolio_performance[1]
         sharpe_ratio = portfolio_performance[2]
 
-        latest_prices = get_latest_prices(df)
-        da = DiscreteAllocation(cleaned_weights, latest_prices, total_portfolio_value=total_portfolio_value)
-        allocation = da.lp_portfolio()
+        #latest_prices = get_latest_prices(df)
+        #da = DiscreteAllocation(cleaned_weights, latest_prices, total_portfolio_value=total_portfolio_value)
+        #allocation = da.lp_portfolio()
         
         weight_json = {}
         performance_json = {}
@@ -67,14 +67,15 @@ def optimize_portfolio():
         for i in cleaned_weights:
             weight_json[i] = str(cleaned_weights[i])
             
+        '''    
         for x in allocation[0]:
             performance_json[x] = str(allocation[0][x])
+        '''
         
         return jsonify({
                 "code": 200,
                 "response":{
                     "cleaned_weights": weight_json,
-                    "allocation": performance_json, 
                     "performance": {
                         "expected_annual_return": expected_annual_return,
                         "annual_volatility": annual_volatility,
@@ -92,7 +93,7 @@ def optimize_portfolio():
     
     
 
-@app.route('/getlowestriskportfolio', methods=["GET"])
+@app.route('/getlowestriskportfolio', methods=["POST"])
 def lowestrisk_portfolio():
      
     '''
@@ -101,7 +102,6 @@ def lowestrisk_portfolio():
         "start_date":"2017-01-01",
         "end_date": "2021-12-31",
         "tickers":["AAPL", "TSLA"],
-        "total_portfolio_value": 20000
     }
     '''
     
@@ -109,7 +109,7 @@ def lowestrisk_portfolio():
     start_date = request_data["start_date"]
     end_date = request_data["end_date"]
     tickers = request_data["tickers"]
-    total_portfolio_value = request_data["total_portfolio_value"]
+    #total_portfolio_value = request_data["total_portfolio_value"]
     
 # Use pandas_reader.data.DataReader to load data
     try:
@@ -133,9 +133,11 @@ def lowestrisk_portfolio():
         annual_volatility = portfolio_performance[1]
         sharpe_ratio = portfolio_performance[2]
 
+        '''
         latest_prices = get_latest_prices(df)
         da = DiscreteAllocation(cleaned_weights, latest_prices, total_portfolio_value=total_portfolio_value)
         allocation = da.lp_portfolio()
+        '''
         
         weight_json = {}
         performance_json = {}
@@ -143,14 +145,15 @@ def lowestrisk_portfolio():
         for i in cleaned_weights:
             weight_json[i] = str(cleaned_weights[i])
             
+        '''
         for x in allocation[0]:
             performance_json[x] = str(allocation[0][x])
+        '''
         
         return jsonify({
                 "code": 200,
                 "response":{
                     "cleaned_weights": weight_json,
-                    "allocation": performance_json, 
                     "performance": {
                         "expected_annual_return": expected_annual_return,
                         "annual_volatility": annual_volatility,

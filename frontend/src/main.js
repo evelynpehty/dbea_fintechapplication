@@ -5,7 +5,17 @@ import VueAxios from 'vue-axios'
 import router from './router'
 import store from './store'
 
-import "bootstrap/dist/css/bootstrap.min.css"
-import "bootstrap"
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-createApp(App).use(store).use(router).use(VueAxios, axios).mount('#app')
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/js/bootstrap.js"
+import { faCircleXmark, faEnvelope, faUser } from '@fortawesome/free-solid-svg-icons'
+
+// Adding icons to the library
+library.add(faCircleXmark)
+library.add(faEnvelope)
+library.add(faUser)
+
+
+createApp(App).use(store).use(router).use(VueAxios, axios).component('font-awesome-icon', FontAwesomeIcon).mount('#app')

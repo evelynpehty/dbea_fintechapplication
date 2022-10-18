@@ -10,24 +10,31 @@
             <li class="nav-item">
               <a class="nav-link mx-2" href="/UserMain">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link mx-2" href="/ViewCustomerStocks">View Stocks</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle mx-3" href="#" role="button" data-bs-toggle="dropdown">Stocks</a>
+              <ul class="dropdown-menu mx-3">
+                <li><a class="dropdown-item" href="/ViewCustomerStocks">My Stocks</a></li>
+                <li><a class="dropdown-item" href="/ViewStockOrder">My Stocks Order</a></li>
+              </ul>
             </li>
             <li class="nav-item">
               <a class="nav-link mx-2" href="/BuySellStocks">Buy/Sell Stocks</a>
             </li>
-            <!---<li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle mx-3" href="#" role="button" data-bs-toggle="dropdown">Learning Journey</a>
-              <ul class="dropdown-menu mx-3">
-                <li><a class="dropdown-item" href="/create-learning-journey">Create Learning Journey</a></li>
-                <li><a class="dropdown-item" href="/manage-learning-journey">Manage Learning Journey</a></li>
-              </ul>
-            </li>-->
+            <li class="nav-item">
+              <a class="nav-link mx-2" href="/PortfolioOptimization">Portfolio Optimization</a>
+            </li>
           </ul>
           <ul class="navbar-nav me-0 mb-2 mb-lg-0">
-              <li class="nav-item">
-                <button class="btn btn-success" style="cursor:pointer;" @click="signOut" >Logout</button>
-              </li>
+            <li class="nav-item me-3">
+              <a class="nav-link" href="/CustomerProfile">
+              <span style="color: #015A06"> 
+                <font-awesome-icon class="mt-1 mx-2 fa-2x" style="color: #000080" icon="fa-solid fa-user" />
+              </span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-success" style="cursor:pointer;" @click="signOut" >Logout</button>
+            </li>
           </ul>
         </div>
       </div>

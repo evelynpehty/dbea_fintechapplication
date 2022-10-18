@@ -1,5 +1,7 @@
 <template>
-  <div style="margin-top:80px">Hello World</div>
+  <div>
+    
+  </div>
 </template>
 
 <script>

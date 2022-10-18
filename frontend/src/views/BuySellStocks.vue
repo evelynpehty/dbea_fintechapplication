@@ -9,15 +9,16 @@
       </div>
       <br>
   
+      
       <div v-if="errors.length != 0">
-        <div class="alert alert-danger alert-dismissible fade show mb-5" role="alert">
+        <div class="alert alert-danger mb-5" role="alert">
           <h4>Please check your inputs</h4>
           <ul>
             <li class="m-0" v-for="e in errors" :key="e">{{e}}</li>
           </ul>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       </div>
+      
    
       <div class="card border-0 shadow p-3 mb-5 bg-white rounded">
         <div class="card-body">
@@ -27,7 +28,7 @@
               <div class="col-6">
                 <div class="mb-3">
                   <label for="buyorsell" class="form-label">Buy or Sell</label>
-                  <select class="form-select form-select-sm" v-model="buyorsell">
+                  <select class="form-select form-select-sm" v-model="buyorsell" required>
                     <option value="buy">Buy</option>
                     <option value="sell">Sell</option>
                   </select>
@@ -35,7 +36,7 @@
               </div>
               <div class="col-6 mb-3">
                   <label for="buyorsell" class="form-label">Order Type</label>
-                  <select class="form-select form-select-sm" v-model="ordertype">
+                  <select class="form-select form-select-sm" v-model="ordertype" required>
                     <option value="Market">Market</option>
                     <option value="Limit">Limit</option>
                   </select>
@@ -74,11 +75,11 @@
             <div class="row" v-if="ordertype == 'Limit'">
               <div class="col mb-3">
                   <label for="limitprice" class="form-label">Limit Price</label>
-                  <input type="number" class="form-control form-control-md input-border-color" id="limitprice" v-model="limitprice">
+                  <input type="number" class="form-control form-control-md input-border-color" id="limitprice" v-model="limitprice" required>
               </div>
               <div class="col mb-3">
                 <label for="expirationtype" class="form-label">Expiration Type</label>
-                <select class="form-select form-select-sm" v-model="expirationtype">
+                <select class="form-select form-select-sm" v-model="expirationtype" required>
                   <option value="Good-til-day">Good till day</option>
                   <option value="Good-til-date">Good till date</option>
                   <option value="Good-til-cancel">Good till cancel</option>
@@ -87,7 +88,7 @@
               <div v-if="expirationtype === 'Good-til-date' && ordertype === 'Limit'" class="col mb-3">
                   <div class="col mb-3">
                     <label for="maturitydate" class="form-label">Maturity Date</label>
-                    <input type="date" class="form-control form-control-md input-border-color" id="maturitydate" v-model="maturitydate">
+                    <input type="date" class="form-control form-control-md input-border-color" id="maturitydate" v-model="maturitydate" required>
                   </div>
               </div>
             </div>
@@ -95,11 +96,11 @@
             <div class="row">
               <div class="col-6 mb-3">
                   <label for="quantity" class="form-label">Quantity</label>
-                  <input type="number" class="form-control form-control-md input-border-color" id="quantity" v-model="quantity">
+                  <input type="number" class="form-control form-control-md input-border-color" id="quantity" v-model="quantity" required>
               </div>
               <div class="col-6 mb-3">
                   <label for="buyorsell" class="form-label">Settlment Account</label>
-                  <select class="form-select form-select-sm" v-model="settlementaccount">
+                  <select class="form-select form-select-sm" v-model="settlementaccount" required>
                     <option v-for="value, key in this.customeraccount_arr" :key="key" :value="value.accountID">
                       {{value.accountID}} - {{value.currency+value.balance}}
                     </option>
@@ -250,11 +251,21 @@
       },
   
       btnNo(){
-        //this.$router.push({name:"ViewAllJobs"})
+        this.$router.push({name:"ViewCustomerStocks"})
       },
   
       checkForm(){
         this.errors = [];
+        if(this.stocksymbol == null){
+          this.errors.push("Please select a stock")
+        }
+        
+        
+        if(this.maturitydate != null & new Date(this.maturitydate) < new Date()){
+          console.log(this.maturitydate)
+          this.errors.push("Invalid date")
+        }
+
         if((this.errors).length == 0){
           this.PlaceOrder()
         }
@@ -281,12 +292,16 @@
         if(owned >= this.quantity){
 
           var headerObj = this.$store.state.headerObj   
-              var contentObj = {}
+              var contentObj = {
+                Content:{
 
-              contentObj["settlementAccount"] = this.settlementaccount
-              contentObj["symbol"] = this.stocksymbol.symbol
-              contentObj["buyOrSell"] = this.buyorsell
-              contentObj["quantity"] = this.quantity
+                }
+              }
+
+              contentObj.Content["settlementAccount"] = this.settlementaccount
+              contentObj.Content["symbol"] = this.stocksymbol.symbol
+              contentObj.Content["buyOrSell"] = this.buyorsell
+              contentObj.Content["quantity"] = this.quantity
 
               if(this.ordertype=="Market"){
                 headerObj["serviceName"] = "placeMarketOrder"   
@@ -326,44 +341,23 @@
               
         }
       },
+      PlaceOrder() {
+        if (this.buyorsell === 'buy') {
+            this.loading = true
+            // Check for sufficient funds
+            //this.checkSufficientFunds()
 
-      //if buy
-      checkSufficientFunds(){
-          this.loading = true
-        
-          var headerObj = this.$store.state.headerObj    
-          headerObj["serviceName"] = "getStockPrice"           
-          var header = JSON.stringify(headerObj); 
-
-          var contentObj = {
-            "symbol" : this.stocksymbol.symbol
-          }
-          var content = JSON.stringify(contentObj); 
-
-          this.axios.post("http://tbankonline.com/SMUtBank_API/Gateway?Header="+header+"&Content="+content).then(response=> {
-            var data = response.data.Content.ServiceResponse
-            var errorcode = data.ServiceRespHeader.GlobalErrorID
-            if(errorcode == "010000"){
-              if (this.ordertype === 'Market') {
-                  this.total_price = data.Stock_Details.price * this.quantity
-                } else {
-                  this.to = data.Stock_Details.price * this.limitprice
+            var headerObj = this.$store.state.headerObj   
+              var contentObj = {
+                Content:{
+                  
                 }
-            }     
-            var account_balance = this.customeraccount_arr.filter(account => account.accountID === this.settlementaccount)       
-            this.account_balance = account_balance[0].balance
+              }
 
-          }).catch((error)=>{
-              console.log(error)
-          }).finally(()=>{
-            if(this.account_balance >= this.total_price){
-              var headerObj = this.$store.state.headerObj   
-              var contentObj = {}
-
-              contentObj["settlementAccount"] = this.settlementaccount
-              contentObj["symbol"] = this.stocksymbol.symbol
-              contentObj["buyOrSell"] = this.buyorsell
-              contentObj["quantity"] = this.quantity
+              contentObj.Content["settlementAccount"] = this.settlementaccount
+              contentObj.Content["symbol"] = this.stocksymbol.symbol
+              contentObj.Content["buyOrSell"] = this.buyorsell
+              contentObj.Content["quantity"] = this.quantity
 
               if(this.ordertype=="Market"){
                 headerObj["serviceName"] = "placeMarketOrder"   
@@ -395,19 +389,6 @@
                 }).finally(()=>{
                     this.loading = false
                 })
-            }else{
-              this.loading = false;
-              this.modalActive = true
-              this.btnActive=false;
-              this.modalMessage = "Insufficient fund!"    
-            }  
-          })
-      },
-  
-      PlaceOrder() {
-        if (this.buyorsell === 'buy') {
-            // Check for sufficient funds
-            this.checkSufficientFunds()
         } else {
             // Check for sufficient stocks
             this.checkSufficientStocks()

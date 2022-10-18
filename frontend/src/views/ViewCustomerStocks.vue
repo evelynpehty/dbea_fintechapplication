@@ -2,6 +2,9 @@
     <Loading v-show="loading" />
     <Modal v-if="modalActive" :modalMessage="modalMessage" v-on:close-modal="closeModal"/>
     <div class="container">
+        <div class="row" style="margin-top:20px">
+            <h2 class="title">My Stocks</h2>
+        </div>
         <div class="row">
             <table class="table table-striped">
                 <thead>
@@ -25,7 +28,7 @@
             </table>
         </div>
     </div>
-  </template>
+</template>
   
   <script>
 import Loading from "../components/Loading";
