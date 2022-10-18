@@ -47,6 +47,13 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'ShareFontBold', Arial, sans-serif !important;
   color: #000080;
 }
+thead{
+    background-color: #000080
+}
+th{
+    color:white
+}
+
 
 div {
   font-family: 'ShareFontRegular', Arial, Helvetica, sans-serif;
@@ -55,6 +62,7 @@ div {
 body {
   padding-top: 4.5rem;
 }
+
 
 .btn-success {
   background-color: #000080 !important;
@@ -87,20 +95,20 @@ body {
 }
 
 .multiselect__tags {
-    border: 1px solid #afafef !important;
-  }
+  border: 1px solid #afafef !important;
+}
 
-  .multiselect__tag {
-    background: #000080 !important;
-  }
+.multiselect__tag {
+  background: #000080 !important;
+}
 
-  .multiselect__option--highlight {
-    background: #EAE6E4 !important;
-    color: black !important;
-  }
+.multiselect__option--highlight {
+  background: #EAE6E4 !important;
+  color: black !important;
+}
 
-  .multiselect__tag-icon:after {
-      color: white !important;
-  }
+.multiselect__tag-icon:after {
+    color: white !important;
+}
 
 </style>

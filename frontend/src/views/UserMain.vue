@@ -17,7 +17,7 @@
         </div>
             
         <div v-else class="row" style="margin-top:20px">
-            <table class="table">
+            <table class="table table-bordered table-md">
                 <thead>
                     <tr>
                     <th scope="col">#</th>
@@ -26,7 +26,7 @@
                     <th scope="col">Price</th>
                     <th scope="col">Volume</th>
                     <th scope="col">Previous Close</th>
-                    <th scope="col">Percentage Change</th>
+                    <th scope="col">Percentage Change (%)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,10 +34,10 @@
                         <td>{{ key+1 }}</td>
                         <td>{{value.company}}</td>
                         <td>{{value.symbol}}</td>
-                        <td>{{value.price}}</td>
+                        <td>{{formatNumber(value.price)}}</td>
                         <td>{{value.volume}}</td>
-                        <td>{{value.prevClose}}</td>
-                        <td :class="{positive: value.percentageChange >= 0, negative: value.percentageChange < 0}" >{{value.percentageChange}}</td>
+                        <td>{{formatNumber(value.prevClose)}}</td>
+                        <td :class="{positive: value.percentageChange >= 0, negative: value.percentageChange < 0}" >{{formatNumber(value.percentageChange)}}</td>
                     </tr>
                     
                 </tbody>
@@ -87,7 +87,8 @@ export default {
                     this.loading=false
                 }
             }).catch((error)=>{
-                console.log(error)
+                this.modalActive = true
+                this.modalMessage = error
             }).finally(()=>{
                 headerObj["serviceName"] = "getStockPrice"           
                 var header = JSON.stringify(headerObj); 
@@ -120,6 +121,11 @@ export default {
                 )
             })
         },
+        methods:{
+            formatNumber(num) {
+                return parseFloat(num).toFixed(2)
+            },
+        },
         computed:{
             filterStocks(){
                 if(this.searchQuery !== ""){
@@ -144,6 +150,5 @@ export default {
 .negative {
   color: red;
 }
-
 
 </style>
