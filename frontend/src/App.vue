@@ -85,4 +85,22 @@ body {
   border:1px solid #afafef !important;
   box-shadow: 0 0 10px #afafef !important;
 }
+
+.multiselect__tags {
+    border: 1px solid #afafef !important;
+  }
+
+  .multiselect__tag {
+    background: #000080 !important;
+  }
+
+  .multiselect__option--highlight {
+    background: #EAE6E4 !important;
+    color: black !important;
+  }
+
+  .multiselect__tag-icon:after {
+      color: white !important;
+  }
+
 </style>
