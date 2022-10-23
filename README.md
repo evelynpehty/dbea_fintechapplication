@@ -15,7 +15,7 @@
 4. npm run serve
 
 ## login credentials [in case you forget your account credentials, you can use mine)
-- userid: eveyln
+- userid: evelynpeh
 - pin: 123123
 - otp: 999999
 
