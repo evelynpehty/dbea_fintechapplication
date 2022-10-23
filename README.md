@@ -6,7 +6,7 @@
 3. python -m pip install Flask-Cors
 4. python -m pip install PyPortfolioOpt
 5. python -m pip install pandas-datareader
-2. python api.py
+6. python api.py
 
 ## frontend
 1. cd frontend
