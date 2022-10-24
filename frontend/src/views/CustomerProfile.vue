@@ -52,13 +52,13 @@
                                     </div>
                                     <div class="col-lg-6 mb-4">
                                         <label class="form-control-label" for="input-pin">PIN</label>
-                                        <input type="text" id="input-pin" class="form-control" placeholder="PIN" v-model=pin >
+                                        <input type="text" id="input-pin" class="form-control" placeholder="PIN" v-model=pin>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg mb-4">
                                         <label class="form-control-label" for="input-email">Email</label>
-                                        <input type="text" id="input-email" class="form-control" placeholder="Email" v-model=emailAddress >
+                                        <input type="text" id="input-email" class="form-control" placeholder="Email" v-model=emailAddress>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -139,11 +139,10 @@
                                     <div class="col-lg-4 mb-4">
                                         <label class="form-control-label" for="input-gender">Gender</label>
                                         <select class="form-select" id="input-gender" v-model="gender">
-                                            <option v-for="(g, index) in genders" :key="index" :value="g.code" >
+                                            <option v-for="(g, index) in genders" :key="index" :value="g.code">
                                                 {{g.description}}
                                             </option>
                                         </select>
-                                        <p>{{gender}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -328,7 +327,7 @@
 
                 age: 0,
                 check_edit_btn: false,
-                pin: '191706',
+                pin: '',
                 account_pin: '',
 
                 // Component item
@@ -353,7 +352,7 @@
                     this.familyName = this.details.familyName
                     this.givenName = this.details.givenName
                     this.dateOfBirth = this.details.dateOfBirth
-                    this.gender = this.details.profile.gender == "F" ? "Female" : "Male"
+                    this.gender = this.details.profile.gender == 'F' ? 'Female' : 'Male'
                     this.occupation = this.details.profile.occupation
                     this.streetAddress = this.details.address.streetAddress1
                     this.city = this.details.address.city
@@ -412,6 +411,13 @@
 
             editProfile(){
                 this.check_edit_btn = true
+
+                if(this.gender == "Female"){
+                    this.gender = "F"
+                }
+                else{
+                    this.gender = "M"
+                }
             },
 
             updateChanges(){
@@ -442,7 +448,13 @@
 
                 var content = JSON.stringify(contentObj);
 
-                if(this.account_pin == this.pin){
+                // if none of the contentobj.content is empty
+                if(contentObj.Content["familyName"] !== "" && contentObj.Content["givenName"] !== "" && contentObj.Content["dateOfBirth"] !== "" && 
+                    contentObj.Content["gender"] !== "" && contentObj.Content["occupation"] !== "" && contentObj.Content["streetAddress"] !== "" &&
+                    contentObj.Content["city"] !== "" && contentObj.Content["state"] !== "" && contentObj.Content["country"] !== "" && 
+                    contentObj.Content["postalCode"] !== "" && contentObj.Content["emailAddress"] !== "" && contentObj.Content["countryCode"] !== "" &&
+                    contentObj.Content["mobileNumber"] !== "" && this.account_pin == this.pin){
+
                     this.axios.post("http://tbankonline.com/SMUtBank_API/Gateway?Header="+header+"&Content="+content).then((response)=>{
                         var data = response.data.Content.ServiceResponse
                         var errorcode = data.ServiceRespHeader.GlobalErrorID
@@ -451,8 +463,8 @@
                             this.modalActive = true
                             this.btnActive = true
                             this.modalMessage = "Profile updated successfully!"
-                            
-                            location.reload()
+
+                            this.$router.go(this.$router.currentRoute)
                         }
                         else{
                             this.modalActive = true
@@ -470,7 +482,7 @@
                 }
                 else{
                     this.modalActive = true
-                    this.modalMessage = "Invalid PIN. Please try again."
+                    this.modalMessage = "Invalid update. Please check your inputs again."
                     this.success = false;
                 }
             },
