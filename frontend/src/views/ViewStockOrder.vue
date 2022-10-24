@@ -14,7 +14,22 @@
         </div>
             
         <div v-else class="row" style="margin-top:20px">
-            <table class="table table-bordered table-md text-center">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a @click="filterstocks('Filled', 1)" :class="{'nav-link': true, active:1 == currentIndex}" aria-current="page" href="#">Filled</a>
+                </li>
+                <li class="nav-item">
+                    <a @click="filterstocks('Unfilled', 2)" :class="{'nav-link': true, active:2 == currentIndex}" href="#">Unfilled</a>
+                </li>
+                <li class="nav-item">
+                    <a @click="filterstocks('Open', 3)" :class="{'nav-link': true, active:3 == currentIndex}" href="#">Open</a>
+                </li>
+                <li class="nav-item">
+                    <a @click="filterstocks('Cancelled', 4)" :class="{'nav-link': true, active:4 == currentIndex}" href="#">Cancelled</a>
+                </li>
+            </ul>
+
+            <table v-if="filtered_arr.length != 0" class="table table-bordered table-md text-center">
                 <thead>
                     <tr>
                     <th scope="col">Order ID</th>
@@ -29,11 +44,11 @@
                     <th scope="col">Maturity Date</th>
                     <th scope="col">Expiration Type</th>
                     <th scope="col">Order Status</th>
-                    <th>Cancel</th>
+                    <th v-if="currentstatus == 'Open'" scope="col">Cancel</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(value,key) in stockorder_arr" :key="key" >
+                    <tr v-for="(value,key) in filtered_arr" :key="key" >
                         <td>{{value.orderID}}</td>
                         <td>{{value.order_date}}</td>
                         <td>{{value.orderType}}</td>
@@ -46,12 +61,19 @@
                         <td>{{value.maturity_date}}</td>
                         <td>{{value.expiration_type}}</td>
                         <td>{{value.order_status}}</td>
-                        <td><font-awesome-icon @click="openModal(value.orderID)" class="mx-auto fa-2x" style="color: red" icon="fa-solid fa-xmark" /></td>
+                        <td v-if="currentstatus == 'Open'"><font-awesome-icon v-if="value.order_status == 'Open'" @click="openModal(value.orderID)" class="mx-auto fa-2x" style="color: red" icon="fa-solid fa-xmark" /></td>
                     </tr>
                     
                 </tbody>
                 
             </table>
+            <div class="row mt-5" v-else>
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center">
+                    <h1 class="my-3">No Results</h1>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
         </div>
         <ModalComponent v-if="modalActive" :modalMessage="modalMessage" :btnActive="modalBtn" @btn-yes="cancelOrder()" @btn-no="closeModal()" @close-modal="closeModal()"></ModalComponent>
     </div>
@@ -71,12 +93,15 @@ export default {
             customer:{},
             modalActive:false,
             modalMessage: "",
-            modalBtn: null
+            modalBtn: null,
+            filtered_arr: [],
+            currentIndex: 1,
+            currentstatus: "Filled",
+            reload: false
 
         }
     },
     created(){
-        // this.placeOrder()
         this.loading = true
         var headerObj = this.$store.state.headerObj    
         headerObj["serviceName"] = "getStockOrders"           
@@ -90,6 +115,7 @@ export default {
             {
                 this.stockorder_arr = data.StockOrderList.StockOrder
                 console.log(this.stockorder_arr)
+                this.filterstocks(this.currentstatus, this.currentIndex)
             }
             else
             {
@@ -101,13 +127,18 @@ export default {
             this.modalActive = true
             this.modalMessage = error
         })  
+        
     },
     methods:{
         closeModal() {
             this.modalActive = false
+            if(this.relad){
+                location.reload()
+            }
         },
 
         openModal(orderID) {
+            this.reload = false
             this.modalBtn = true
             this.modalActive = true
             this.currentOrderID = orderID
@@ -136,6 +167,7 @@ export default {
                 {
                     console.log(data)
                     this.modalBtn = false
+                    this.reload = true
                     this.modalMessage = "Stock Order:" + this.currentOrderID + " has been cancelled successfully."
                 }
                 else
@@ -148,51 +180,18 @@ export default {
                 this.modalActive = true
                 this.modalMessage = error
             }) 
-            // this.$router.go(this.$router.currentRoute)
         },
 
         formatNumber(num) {
             return parseFloat(num).toFixed(2)
         },
-        
-        placeOrder(){
-            this.loading = true
-            var headerObj = this.$store.state.headerObj    
-            headerObj["serviceName"] = "placeMarketOrder"           
-            var header = JSON.stringify(headerObj); 
-
-            var contentObj = {
-                Content:{
-                    "settlementAccount" : '9145',
-                    "symbol": 'GOOG',
-                    "buyOrSell": 'buy',
-                    "quantity": 5,
-                }
+        filterstocks(status, index){
+            this.currentIndex = index
+            this.currentstatus = status
+            if(this.stockorder_arr){
+                this.filtered_arr = this.stockorder_arr.filter((stock) => stock.order_status === status)
             }
-            var content = JSON.stringify(contentObj);
-
-            this.axios.post("http://tbankonline.com/SMUtBank_API/Gateway?Header="+header+"&Content="+ content)
-            .then((response)=>{
-                var data = response.data.Content.ServiceResponse
-                var errorcode = data.ServiceRespHeader.GlobalErrorID
-                console.log(data)
-                if(errorcode == "010000")
-                {
-                    let order = data.StockOrder
-                    console.log(order)
-                }
-                else
-                {
-                    this.modalActive = true
-                    this.modalMessage = data.ServiceRespHeader.ErrorDetails
-                    this.loading=false
-                }
-            }).catch((error)=>{
-                this.modalActive = true
-                this.modalMessage = error
-            }) 
         }
-        
 }
 
 }
