@@ -16,16 +16,16 @@
         <div v-else class="row" style="margin-top:20px">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a @click="filterstocks('Filled', 1)" :class="{'nav-link': true, active:1 == currentIndex}" aria-current="page" href="#">Filled</a>
+                    <a @click="filterstocks('Filled', 1)" :class="{'nav-link': true, active:1 == currentIndex, 'bg-light': true, 'text-dark': true}" aria-current="page" href="#">Filled</a>
                 </li>
                 <li class="nav-item">
-                    <a @click="filterstocks('Unfilled', 2)" :class="{'nav-link': true, active:2 == currentIndex}" href="#">Unfilled</a>
+                    <a @click="filterstocks('Unfilled', 2)" :class="{'nav-link': true, active:2 == currentIndex, 'bg-light': true, 'text-dark': true}" href="#">Unfilled</a>
                 </li>
                 <li class="nav-item">
-                    <a @click="filterstocks('Open', 3)" :class="{'nav-link': true, active:3 == currentIndex}" href="#">Open</a>
+                    <a @click="filterstocks('Open', 3)" :class="{'nav-link': true, active:3 == currentIndex, 'bg-light': true, 'text-dark': true}" href="#">Open</a>
                 </li>
                 <li class="nav-item">
-                    <a @click="filterstocks('Cancelled', 4)" :class="{'nav-link': true, active:4 == currentIndex}" href="#">Cancelled</a>
+                    <a @click="filterstocks('Cancelled', 4)" :class="{'nav-link': true, active:4 == currentIndex, 'bg-light': true, 'text-dark': true}" href="#">Cancelled</a>
                 </li>
             </ul>
 
@@ -197,6 +197,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .active{
+        background-color: #000080 !important;
+        color: white !important;
+    }
 </style>
