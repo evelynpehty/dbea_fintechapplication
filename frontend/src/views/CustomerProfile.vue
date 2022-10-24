@@ -386,11 +386,6 @@
                 this.closeModal()
             },
 
-            btnNo(){
-                this.modalActive = !this.modalActive;
-                this.$router.go(this.$router.currentRoute)
-            },
-
             backbtn(){
                 this.$router.go(this.$router.currentRoute)
             },
@@ -464,6 +459,7 @@
                             this.btnActive = true
                             this.modalMessage = "Profile updated successfully!"
 
+                            this.btnActive = false
                             this.$router.go(this.$router.currentRoute)
                         }
                         else{
@@ -484,6 +480,8 @@
                     this.modalActive = true
                     this.modalMessage = "Invalid update. Please check your inputs again."
                     this.success = false;
+                    
+                    this.btnActive = false
                 }
             },
         },
