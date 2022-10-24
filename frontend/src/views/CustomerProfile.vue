@@ -143,6 +143,7 @@
                                                 {{g.description}}
                                             </option>
                                         </select>
+                                        <p>{{gender}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -153,8 +154,8 @@
                 </div>
             </div>
 
-            <div class="d-grid gap-2 col-6 mx-auto mb-5">
-                <button class="btn btn-primary" type="button" @click="updateChanges()">Update Changes</button>
+            <div class="text-center mb-5">
+                <button class="btn btn-primary mx-3 px-5" type="button" @click="updateChanges()">Update Changes</button>
                 <button class="btn btn-outline-danger" type="button" @click="backbtn()">Cancel</button>
             </div>
             
@@ -352,7 +353,7 @@
                     this.familyName = this.details.familyName
                     this.givenName = this.details.givenName
                     this.dateOfBirth = this.details.dateOfBirth
-                    this.gender = this.details.profile.gender // == "F" ? "Female" : "Male"
+                    this.gender = this.details.profile.gender == "F" ? "Female" : "Male"
                     this.occupation = this.details.profile.occupation
                     this.streetAddress = this.details.address.streetAddress1
                     this.city = this.details.address.city
