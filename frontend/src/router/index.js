@@ -8,6 +8,8 @@ import PortfolioOptimization from '../views/PortfolioOptimization.vue'
 import CustomerProfile from '../views/CustomerProfile.vue'
 import ViewStockOrder from '../views/ViewStockOrder.vue'
 
+import StockNews from '../views/StockNews.vue'
+
 const routes = [
   {
     path: "/",
@@ -79,6 +81,15 @@ const routes = [
     component: CustomerProfile,
     meta: {
       title: "CustomerProfile",
+      requiresAuth: false,
+    }
+  },
+  {
+    path: "/StockNews",
+    name: "StockNews",
+    component: StockNews,
+    meta: {
+      title: "StockNews",
       requiresAuth: false,
     }
   },
