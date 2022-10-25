@@ -119,9 +119,8 @@ export default {
             }
             else
             {
-                this.modalActive = true
-                this.modalMessage = data.ServiceRespHeader.ErrorDetails
                 this.loading=false
+                this.stockorder_arr = []
             }
         }).catch((error)=>{
             this.modalActive = true
