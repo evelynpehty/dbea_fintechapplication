@@ -5,6 +5,7 @@
     <div class="container">
         <div class="row" style="margin-top:20px">
             <h2 class="title">My Holdings ({{customerStocksArr.length}})</h2>
+            <h5 class="title my-4">Portfolio Value: <amt>${{totalHoldingValue}}</amt></h5>
         </div>
 
         <div class="row mt-5" v-if="customerStocksArr.length == 0">
@@ -33,7 +34,6 @@
                 <table class="table table-bordered table-md">
                     <thead>
                         <tr>
-                        <th scope="col">#</th>
                         <th scope="col">Symbol</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Current Price</th>
@@ -42,11 +42,10 @@
                     </thead>
                     <tbody>
                         <tr v-for="(value,key) in filterStocks" :key="key" >
-                            <td>{{ key+1 }}</td>
-                            <td>{{value.symbol}}</td>
+                            <td><b>{{value.symbol}}</b></td>
                             <td>{{value.quantity}}</td>
-                            <td>{{parseFloat(value.price).toFixed(2)}}</td>
-                            <td>{{parseFloat(value.price * value.quantity).toFixed(2)}}</td>
+                            <td>${{parseFloat(value.price).toFixed(2)}}</td>
+                            <td>${{parseFloat(value.price * value.quantity).toFixed(2)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -130,17 +129,31 @@ export default {
         filterStocks(){
             if(this.searchQuery !== ""){
                 return this.customerStocksArr.filter((name)=>{
-                    return Object.values(name).some((word) => String(word).toLowerCase().includes(this.searchQuery))
+                    return Object.values(name).some((word) => String(word).toLowerCase().includes(this.searchQuery.toLowerCase()))
                 })
             }else{
                 return this.customerStocksArr
             }
         },
+        totalHoldingValue(){
+            var total = 0
+            total = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.price * item.quantity), 0)
+            return total.toFixed(2)
+            }
     }
 }   
 
 </script>
 
 <style ang="scss" scoped>
+
+h5 {
+  font-family: 'ProductSansBold', Arial, sans-serif !important;
+  color: black;
+}
+
+amt{
+    color: var(--purple);
+}
 
 </style>
