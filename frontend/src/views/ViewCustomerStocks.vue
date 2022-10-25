@@ -4,7 +4,7 @@
     
     <div class="container">
         <div class="row" style="margin-top:20px">
-            <h2 class="title">My Stocks</h2>
+            <h2 class="title">My Holdings ({{customerStocksArr.length}})</h2>
         </div>
 
         <div class="row mt-5" v-if="customerStocksArr.length == 0">
@@ -36,8 +36,8 @@
                         <th scope="col">#</th>
                         <th scope="col">Symbol</th>
                         <th scope="col">Quantity</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Trading Date</th>
+                        <th scope="col">Current Price</th>
+                        <th scope="col">Total Value</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,8 +45,8 @@
                             <td>{{ key+1 }}</td>
                             <td>{{value.symbol}}</td>
                             <td>{{value.quantity}}</td>
-                            <td>{{value.price}}</td>
-                            <td>{{value.tradingDate}}</td>
+                            <td>{{parseFloat(value.price).toFixed(2)}}</td>
+                            <td>{{parseFloat(value.price * value.quantity).toFixed(2)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -90,7 +90,7 @@ export default {
                 
                 if(Array.isArray(stock_arr)){
                     for(var s of stock_arr){
-                        //display stocks with quantity that is not 0 
+                        //append stocks with quantity that is not 0 to customerStocksArr
                         if(s.quantity !=0 ){
                             this.customerStocksArr.push(s)
                         }
@@ -113,7 +113,10 @@ export default {
             this.modalMessage = error
         }).finally(()=>{
             this.loading = false
-        })
+        });
+
+        
+
     },
     methods: {
         closeModal() {
@@ -132,12 +135,12 @@ export default {
             }else{
                 return this.customerStocksArr
             }
-        }
+        },
     }
-}       
+}   
 
 </script>
 
-<style>
+<style ang="scss" scoped>
 
 </style>
