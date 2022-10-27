@@ -21,7 +21,7 @@
               <a class="nav-link mx-2" href="/BuySellStocks">Buy/Sell Stocks</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link mx-2" href="/PortfolioOptimization">Portfolio Optimization</a>
+              <a class="nav-link mx-2" href="/ManagePortfolio">Manage Current Portfolio</a>
             </li>
           </ul>
           <ul class="navbar-nav me-0 mb-2 mb-lg-0">

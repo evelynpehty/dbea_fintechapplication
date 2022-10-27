@@ -4,7 +4,8 @@ import LoginPage from '../views/LoginPage.vue'
 import UserMain from '../views/UserMain.vue'
 import ViewCustomerStocks from '../views/ViewCustomerStocks.vue'
 import BuySellStocks from '../views/BuySellStocks.vue'
-import PortfolioOptimization from '../views/PortfolioOptimization.vue'
+import ManagePortfolio from '../views/ManagePortfolio.vue'
+import PortfolioEvaluation from '../views/PortfolioEvaluation.vue'
 import CustomerProfile from '../views/CustomerProfile.vue'
 import ViewStockOrder from '../views/ViewStockOrder.vue'
 
@@ -63,12 +64,23 @@ const routes = [
       requiresAuth: false,
     }
   },
+
   {
-    path: "/PortfolioOptimization",
-    name: "PortfolioOptimization",
-    component: PortfolioOptimization,
+    path: "/ManagePortfolio",
+    name: "ManagePortfolio",
+    component: ManagePortfolio,
     meta: {
-      title: "PortfolioOptimization",
+      title: "ManagePortfolio",
+      requiresAuth: false,
+    }
+  },
+
+  {
+    path: "/PortfolioEvaluation/:portfolioid",
+    name: "PortfolioEvaluation",
+    component: PortfolioEvaluation,
+    meta: {
+      title: "PortfolioEvaluation",
       requiresAuth: false,
     }
   },
