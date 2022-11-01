@@ -9,6 +9,8 @@ import PortfolioEvaluation from '../views/PortfolioEvaluation.vue'
 import CustomerProfile from '../views/CustomerProfile.vue'
 import ViewStockOrder from '../views/ViewStockOrder.vue'
 
+import OurTeam from '../views/OurTeam.vue'
+
 const routes = [
   {
     path: "/",
@@ -91,6 +93,16 @@ const routes = [
     component: CustomerProfile,
     meta: {
       title: "CustomerProfile",
+      requiresAuth: false,
+    }
+  },
+
+  {
+    path: "/OurTeam",
+    name: "OurTeam",
+    component: OurTeam,
+    meta: {
+      title: "OurTeam",
       requiresAuth: false,
     }
   },

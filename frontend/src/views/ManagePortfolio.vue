@@ -7,28 +7,32 @@
             <p class="title">Based on your risk profile, please select your preferred portfolio type based on your risk appetite.</p>
         </div>
 
-        <div class="row gy-3 mb-5">
-            <!-- Lowest Risk Portfolio -->
-            <div class="col-sm-12 col-md-4">
-                <div class="rounded p-3 border bg-light" @click="btnNext(1)">
-                    <img src="../assets/portfolio.png" alt="portfolio" class="p-md-3 img-fluid"/>
-                    <h3 class="text-center">Lowest Risk</h3>
-                </div>
-            </div>
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-xl-8">
+                <!-- Lowest Risk Portfolio -->
+                <div class="row gy-3 mb-5">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="rounded p-3 border bg-light" @click="btnNext(1)">
+                            <img src="../assets/portfolio.png" alt="portfolio" class="p-md-3 img-fluid"/>
+                            <h3 class="text-center">Lowest Risk</h3>
+                        </div>
+                    </div>
 
-            <!-- Balanced Portfolio -->
-            <div class="col-sm-12 col-md-4">
-                <div class="rounded p-3 border bg-light" @click="btnNext(2)">
-                    <img src="../assets/portfolio.png" alt="portfolio" class="p-md-3 img-fluid"/>
-                    <h3 class="text-center">Balanced</h3>
-                </div>
-            </div>
+                    <!-- Balanced Portfolio -->
+                    <div class="col-sm-6 col-md-4">
+                        <div class="rounded p-3 border bg-light" @click="btnNext(2)">
+                            <img src="../assets/portfolio.png" alt="portfolio" class="p-md-3 img-fluid"/>
+                            <h3 class="text-center">Balanced</h3>
+                        </div>
+                    </div>
 
-            <!-- Highest Return Portfolio -->
-            <div class="col-sm-12 col-md-4">
-                <div class="rounded p-3 border bg-light" @click="btnNext(3)">
-                    <img src="../assets/portfolio.png" alt="portfolio" class="p-md-3 img-fluid"/>
-                    <h3 class="text-center">Highest Return</h3>
+                    <!-- Highest Return Portfolio -->
+                    <!-- <div class="col-sm-6 col-md-4">
+                        <div class="rounded p-3 border bg-light" @click="btnNext(3)">
+                            <img src="../assets/portfolio.png" alt="portfolio" class="p-md-3 img-fluid"/>
+                            <h3 class="text-center">Highest Return</h3>
+                        </div>
+                    </div> -->
                 </div>
             </div>
         </div>

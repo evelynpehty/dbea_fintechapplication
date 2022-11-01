@@ -14,7 +14,7 @@
               <a class="nav-link mx-2" href="/#contact">Contact Us</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link mx-2" href="/Team">Our Team</a>
+              <a class="nav-link mx-2" href="/OurTeam">Our Team</a>
             </li>
           </ul>
           <div class="d-flex">

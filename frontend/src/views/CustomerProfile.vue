@@ -489,7 +489,7 @@
     }
   </script>
   
-  <style>
+  <style lang="scss" scoped>
   @media (min-width: 992px) {
         .pl-lg-4 {
             padding-left: 1.5rem !important;
