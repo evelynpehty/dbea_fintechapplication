@@ -246,8 +246,11 @@ def highestrisk_portfolio():
         # prepare data for json
         weight_json = {}
 
-        for i in weights[np.argmax(portf_results_df.sharpe_ratio)]:
-            weight_json[i] = str(i)
+        #for i in weights[np.argmax(portf_results_df.sharpe_ratio)]:
+        #    weight_json[i] = str(i)
+        
+        for x, y in zip(tickers, weights[np.argmax(portf_results_df.sharpe_ratio)]):
+            weight_json[x] = str(y)
 
         expected_annual_return = max_sharpe_portf[0]
         annual_volatility = max_sharpe_portf[1]
