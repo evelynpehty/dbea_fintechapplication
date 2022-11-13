@@ -8,7 +8,7 @@ import ManagePortfolio from '../views/ManagePortfolio.vue'
 import PortfolioEvaluation from '../views/PortfolioEvaluation.vue'
 import CustomerProfile from '../views/CustomerProfile.vue'
 import ViewStockOrder from '../views/ViewStockOrder.vue'
-
+import StockNews from '../views/StockNews.vue'
 import OurTeam from '../views/OurTeam.vue'
 
 const routes = [
@@ -96,7 +96,17 @@ const routes = [
       requiresAuth: false,
     }
   },
-
+  
+  {
+    path: "/StockNews",
+    name: "StockNews",
+    component: StockNews,
+    meta: {
+      title: "StockNews",
+      requiresAuth: false,
+    }
+  },
+  
   {
     path: "/OurTeam",
     name: "OurTeam",
