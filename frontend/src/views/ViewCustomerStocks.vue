@@ -5,7 +5,10 @@
     <div class="container">
         <div class="row" style="margin-top:20px">
             <h2 class="title">My Holdings ({{customerStocksArr.length}})</h2>
-            <h5 class="title my-4">Portfolio Value: <amt>${{totalHoldingValue}}</amt></h5>
+            <h5 class="title mt-4">Portfolio Value:</h5>
+            <h5 class="title"><amt>${{totalHoldingValue}}</amt></h5>
+            <h5 class="mb-4"><display :style="'color: ' + (percentageChange > 0 ? 'green' : 'red')">{{percentageChange.toFixed(2)}}%</display><faded class="mx-2">1D Change</faded></h5>
+            <!-- <h5 class="title my-4 col-sm-6" >Total Invested: <amt>${{totalPurchasedValue}}</amt></h5> -->
         </div>
 
         <div class="row mt-5" v-if="customerStocksArr.length == 0">
@@ -38,14 +41,17 @@
                         <th scope="col">Quantity</th>
                         <th scope="col">Current Price</th>
                         <th scope="col">Total Value</th>
+                        <th scope="col">PnL</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(value,key) in filterStocks" :key="key" >
                             <td><b>{{value.symbol}}</b></td>
                             <td>{{value.quantity}}</td>
-                            <td>${{parseFloat(value.price).toFixed(2)}}</td>
-                            <td>${{parseFloat(value.price * value.quantity).toFixed(2)}}</td>
+                            <!-- <td>${{parseFloat(value.price).toFixed(2)}}</td> -->
+                            <td>${{parseFloat(value.marketPrice).toFixed(2)}}</td>
+                            <td><amt>${{parseFloat(value.marketPrice * value.quantity).toFixed(2)}}</amt></td>
+                            <td :style="'color: ' + (percentageChange > 0 ? 'green' : 'red')">{{PnL}}%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -74,6 +80,9 @@ export default {
             modalActive: null,
 
             customerStocksArr: [],
+            stock_symbols: [],
+            stock_quantity: [],
+            stock_price: [],
             searchQuery: "",
 
             success:false
@@ -97,20 +106,55 @@ export default {
                         //append stocks with quantity that is not 0 to customerStocksArr
                         if(s.quantity !=0 ){
                             this.customerStocksArr.push(s)
+                            this.stock_symbols.push(s.symbol)
+                            this.stock_quantity.push(s.quantity)
+                            this.stock_price.push(s.price)
                         }
                     }
+                    // this.chartData.labels = this.stock_symbols
+                    // this.newChartData.labels = this.stock_symbols
+                    // this.chartData.datasets[0].data = this.stock_quantity
                 }else{
                     if(stock_arr.quantity != 0)
                     {
                         this.customerStocksArr.push(stock_arr)
                     }                        
                 }
+                console.log(data)
                 
             }else{
                 this.modalActive = true
                 this.modalMessage = data.ServiceRespHeader.ErrorDetails
                 this.success = false;
             }
+
+            // Get Stock Prices 
+            headerObj["serviceName"] = "getStockPrice"           
+            var header = JSON.stringify(headerObj);
+
+            let promises = [];
+
+            for (var symbol of this.stock_symbols) {
+                var contentObj = {
+                    Content:{
+                        "symbol" : symbol
+                    }
+                }
+                var content = JSON.stringify(contentObj);
+                
+                promises.push(this.axios.post("http://tbankonline.com/SMUtBank_API/Gateway?Header="+header+"&Content="+ content))
+            }
+
+            Promise.all(promises).then(responses => 
+            {
+                for(var r in responses) {
+                    var errorcode = responses[r].data.Content.ServiceResponse.ServiceRespHeader.GlobalErrorID
+                    if (errorcode == "010000"){
+                        this.customerStocksArr[r]["marketPrice"] = responses[r].data.Content.ServiceResponse.Stock_Details.price
+                        this.customerStocksArr[r]["prevClose"] = responses[r].data.Content.ServiceResponse.Stock_Details.prevClose
+                    }
+                }
+            })
 
         }).catch((error)=>{
             this.modalActive = true
@@ -119,7 +163,6 @@ export default {
             this.loading = false
         });
 
-        
 
     },
     methods: {
@@ -129,7 +172,44 @@ export default {
         PurchaseStock() {
             this.$router.push({ name: "BuySellStocks"});
         },
-    },
+        // currentPrice(symbol){
+        //     // this.loading = true
+        //     var headerObj = this.$store.state.headerObj
+        //     headerObj["serviceName"] = "getStockPrice"
+        //     var contentObj = {
+        //             Content:{
+        //                 "symbol" : symbol
+        //             }
+        //         }
+
+        //     var header = JSON.stringify(headerObj); 
+        //     var content = JSON.stringify(contentObj); 
+
+        //     this.axios.post("http://tbankonline.com/SMUtBank_API/Gateway?Header="+header+"&Content="+content).then((response)=>{
+        //         var data = response.data.Content.ServiceResponse
+        //         var errorcode = data.ServiceRespHeader.GlobalErrorID
+        //         var price = response.data.Content.Stock_Details.price
+        //         console.log(data)
+        //         console.log(price)
+        //         if(errorcode == "010000")
+        //         {
+        //             return price
+        //         }else{
+        //             // this.modalActive = true
+        //             // this.modalMessage = data.ServiceRespHeader.ErrorDetails
+        //             // this.success = false;
+        //             return 0
+        //         }
+
+        //     // }).catch((error)=>{
+        //     //     this.modalActive = true
+        //     //     this.modalMessage = error
+        //     // }).finally(()=>{
+        //     //     this.loading = false
+        //     });
+            // },
+        },
+
     computed:{
         filterStocks(){
             if(this.searchQuery !== ""){
@@ -140,11 +220,23 @@ export default {
                 return this.customerStocksArr
             }
         },
+        
         totalHoldingValue(){
             var total = 0
-            total = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.price * item.quantity), 0)
+            total = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.marketPrice * item.quantity), 0)
             return total.toFixed(2)
-            }
+        },
+
+        percentageChange(){
+            var closed_price = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.prevClose * item.quantity), 0)
+            var totalHoldingValue = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.marketPrice * item.quantity), 0)
+            var change = ((totalHoldingValue - closed_price)/closed_price)*100
+            // if (change >= 0){
+                
+            // }
+            return change
+        }
+
     }
 }   
 
@@ -153,12 +245,17 @@ export default {
 <style ang="scss" scoped>
 
 h5 {
-font-family: 'ProductSansBold', Arial, sans-serif !important;
-color: black;
+    font-family: 'ProductSansBold', Arial, sans-serif !important;
+    color: black;
 }
 
 amt{
     color: var(--purple);
+    font-size: larger;
 }
 
+faded {
+    color: grey;
+    font-size: small;
+}
 </style>
