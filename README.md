@@ -13,6 +13,7 @@
 1. cd frontend
 2. npm install
 3. npm install vue-multiselect@next
+4. npm install vue-chartjs chart.js
 4. npm run serve
 
 ## login credentials [in case you forget your account credentials, you can use mine)
