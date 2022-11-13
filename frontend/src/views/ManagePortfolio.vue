@@ -27,12 +27,12 @@
                     </div>
 
                     <!-- Highest Return Portfolio -->
-                    <!-- <div class="col-sm-6 col-md-4">
+                    <div class="col-sm-6 col-md-4">
                         <div class="rounded p-3 border bg-light" @click="btnNext(3)">
                             <img src="../assets/portfolio.png" alt="portfolio" class="p-md-3 img-fluid"/>
                             <h3 class="text-center">Highest Return</h3>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>

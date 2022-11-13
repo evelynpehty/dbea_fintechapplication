@@ -2,15 +2,15 @@
     <Loading v-show="loading" />
     <Modal v-if="modalActive" :modalMessage="modalMessage" v-on:close-modal="closeModal"/>
 
-    <div class="container-fluid ">
-        <div class="row" style="margin-top:40px">
+    <div class="container-fluid my-5">
+        <div class="row">
             <h2 class="title">You have selected {{this.portfolioType[this.portfolioID - 1]}} Portfolio</h2>
             <p class="title">Based on your risk appetite, we have curated a new and balanced portfolio for you!</p>
         </div>
         <div class="row justify-content-center">
             <div class="col-xl-8">
                 <div class="row g-3">
-                    <div class="col-12 col-md-6">
+                    <div class="col-12">
                         <div class="p-3 border rounded bg-light">
                             <h4>Current Overview</h4>
                             <h6>Total Market Value
@@ -42,6 +42,23 @@
                         </div>
                     </div>
 
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 border rounded bg-light">
+                            <h4>New & Suggested Holdings</h4>
+                            <Bar
+                            :chart-options="newChartOptions"
+                            :chart-data="newChartData"
+                            :chart-id="chartId"
+                            :dataset-id-key="datasetIdKey"
+                            :plugins="plugins"
+                            :css-classes="cssClasses"
+                            :styles="styles"
+                            :width="width"
+                            :height="height"
+                            />
+                        </div>
+                    </div>
+
                     <div class="col-12">
                         <div class="p-3 border rounded bg-light">
                             <h4>Suggested Portfolio</h4>
@@ -52,7 +69,7 @@
                             </p>
                             <div class="collapse mb-3" id="collapseExample">
                                 <div class="card card-body">
-                                    Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                                    Based on your current holdings, this set of portfolio is analysed and recalculated based on your risk appetite to give you the best outcome you can have.
                                 </div>
                             </div>
 
@@ -177,6 +194,7 @@ export default {
             stock_symbols: [],
             stock_quantity: [],
             stock_price: [],
+            new_stock_quantity: [],
 
             start_date: "",
             end_date: "",
@@ -192,7 +210,7 @@ export default {
 
             success: false,
 
-            // Chart Data
+            // Original Chart Data
             chartData: {
                 labels: [],
                 datasets: [ 
@@ -214,7 +232,35 @@ export default {
                     } 
                 ]
             },
+
             chartOptions: {
+                responsive: true
+            },
+
+            // New & Suggested Data
+            newChartData: {
+                labels: [],
+                datasets: [ 
+                    { 
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 205, 86, 0.2)', 'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(201, 203, 207, 0.2)', 'rgba(59, 60, 54, 0.2)',
+                            'rgba(197, 29, 52, 0.2)', 'rgba(106, 93, 77, 0.2)', 'rgba(255, 35, 1, 0.2)', 'rgba(37, 41, 74, 0.2)',
+                            'rgba(117, 92, 72, 0.2)', 'rgba(137, 58, 61, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132)', 'rgba(255, 159, 64)', 'rgba(255, 205, 86)', 'rgba(75, 192, 192)',
+                            'rgba(54, 162, 235)', 'rgba(153, 102, 255)', 'rgba(201, 203, 207)', 'rgba(59, 60, 54)', 
+                            'rgba(197, 29, 52)', 'rgba(106, 93, 77)', 'rgba(255, 35, 1)', 'rgba(37, 41, 74)',
+                            'rgba(117, 92, 72)', 'rgba(137, 58, 61)',
+                        ],
+                        borderWidth: 1,
+                        data: []
+                    } 
+                ]
+            },
+
+            newChartOptions: {
                 responsive: true
             },
 
@@ -259,6 +305,7 @@ export default {
                         }
                     }
                     this.chartData.labels = this.stock_symbols
+                    this.newChartData.labels = this.stock_symbols
                     this.chartData.datasets[0].data = this.stock_quantity
                 } else {
                     if(stock_arr.quantity != 0)
@@ -316,7 +363,7 @@ export default {
 
             if (this.portfolioID == 1) {
                 this.axios.post("http://localhost:5000/getlowestriskportfolio", jsonSuggestedPortfolio).then((response) => {
-                this.tempSuggestedPortfolio = response.data.response
+                    this.tempSuggestedPortfolio = response.data.response
                 }).catch(error => {
                     this.modalMessage = error.response.data.message 
                 }).finally(() => {
@@ -328,11 +375,21 @@ export default {
                     for (var x in this.customerStocksArr) {
                         this.customerStocksArr[x]["newQuantity"] = parseFloat((this.totalAmount * this.cleaned_weights[this.customerStocksArr[x].symbol]) / this.customerStocksArr[x].price ).toFixed(2)
                     }
+
+                    if (Array.isArray(this.customerStocksArr)) {
+                        for(var s of this.customerStocksArr) {
+                            //display stocks with quantity that is not 0  
+                            if(s.quantity !=0 ){
+                                this.new_stock_quantity.push(s.newQuantity)
+                            }
+                        }
+                    }
+                    this.newChartData.datasets[0].data = this.new_stock_quantity
                     this.loading = false
                 })
             } else if (this.portfolioID == 2) {
                 this.axios.post("http://localhost:5000/getoptimizeportfolio", jsonSuggestedPortfolio).then((response) => {
-                this.tempSuggestedPortfolio = response.data.response
+                    this.tempSuggestedPortfolio = response.data.response
                 }).catch(error => {
                     this.modalMessage = error.response.data.message 
                 }).finally(() => {
@@ -344,6 +401,42 @@ export default {
                     for (var x in this.customerStocksArr) {
                         this.customerStocksArr[x]["newQuantity"] = parseFloat((this.totalAmount * this.cleaned_weights[this.customerStocksArr[x].symbol]) / this.customerStocksArr[x].price ).toFixed(2)
                     }
+
+                    if (Array.isArray(this.customerStocksArr)) {
+                        for(var s of this.customerStocksArr) {
+                            //display stocks with quantity that is not 0  
+                            if(s.quantity !=0 ){
+                                this.new_stock_quantity.push(s.newQuantity)
+                            }
+                        }
+                    }
+                    this.newChartData.datasets[0].data = this.new_stock_quantity
+                    this.loading = false
+                })
+            } else if (this.portfolioID == 3) {
+                this.axios.post("http://localhost:5000/gethighestriskportfolio", jsonSuggestedPortfolio).then((response) => {
+                    this.tempSuggestedPortfolio = response.data.response
+                }).catch(error => {
+                    this.modalMessage = error.response.data.message 
+                }).finally(() => {
+                    this.SuggestedPortfolio = this.tempSuggestedPortfolio
+                    this.annual_volatility = this.SuggestedPortfolio.performance.annual_volatility
+                    this.expected_annual_return = this.SuggestedPortfolio.performance.expected_annual_return
+                    this.sharpe_ratio = this.SuggestedPortfolio.performance.sharpe_ratio
+                    this.cleaned_weights = this.SuggestedPortfolio.cleaned_weights
+                    for (var x in this.customerStocksArr) {
+                        this.customerStocksArr[x]["newQuantity"] = parseFloat((this.totalAmount * this.cleaned_weights[this.customerStocksArr[x].symbol]) / this.customerStocksArr[x].price ).toFixed(2)
+                    }
+
+                    if (Array.isArray(this.customerStocksArr)) {
+                        for(var s of this.customerStocksArr) {
+                            //display stocks with quantity that is not 0  
+                            if(s.quantity !=0 ){
+                                this.new_stock_quantity.push(s.newQuantity)
+                            }
+                        }
+                    }
+                    this.newChartData.datasets[0].data = this.new_stock_quantity
                     this.loading = false
                 })
             }
