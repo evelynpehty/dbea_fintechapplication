@@ -50,6 +50,7 @@ src: url("assets/fonts/Product-Sans-Bold-Italic.ttf");
 
 :root {
   --purple: #6018F1;
+  --light-purple: #EBE4FD;
   --blue : #5FD4E1;
   --white: #ffffff;
 }
