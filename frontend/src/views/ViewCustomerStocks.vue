@@ -6,8 +6,12 @@
         <div class="row" style="margin-top:20px">
             <h2 class="title">My Holdings ({{customerStocksArr.length}})</h2>
             <h5 class="title mt-4">Portfolio Value:</h5>
-            <h5 class="title"><amt>${{totalHoldingValue}}</amt></h5>
-            <h5 class="mb-4"><display :style="'color: ' + (percentageChange > 0 ? 'green' : 'red')">{{percentageChange.toFixed(2)}}%</display><faded class="mx-2">1D Change</faded></h5>
+            <h2 class="title"><amt>${{totalHoldingValue}}</amt></h2>
+        </div>
+        <div class="row">
+            <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (cumulative > 0 ? 'green' : 'red')">${{cumulative.toFixed(2)}}</display><faded class="mx-2">Cumulative P/L</faded></h5>
+            <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (total_stockpnl > 0 ? 'green' : 'red')">{{total_stockpnl.toFixed(2)}}%</display><faded class="mx-2">All Time</faded></h5>
+            <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (percentageChange > 0 ? 'green' : 'red')">{{percentageChange.toFixed(2)}}%</display><faded class="mx-2">1D Change</faded></h5>
             <!-- <h5 class="title my-4 col-sm-6" >Total Invested: <amt>${{totalPurchasedValue}}</amt></h5> -->
         </div>
 
@@ -35,22 +39,23 @@
 
             <div v-else class="row" style="margin-top:20px">
                 <table class="table table-bordered table-md">
-                    <thead>
+                    <thead class="text-center">
                         <tr>
                         <th scope="col">Symbol</th>
                         <th scope="col">Quantity</th>
+                        <th scope="col">Avg Cost</th>
                         <th scope="col">Current Price</th>
-                        <th scope="col">Total Value</th>
-                        <th scope="col">PnL</th>
+                        <th scope="col">Current Total Value</th>
+                        <th scope="col">Profit/Loss</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         <tr v-for="(value,key) in filterStocks" :key="key" >
                             <td><b>{{value.symbol}}</b></td>
                             <td>{{value.quantity}}</td>
-                            <!-- <td>${{parseFloat(value.price).toFixed(2)}}</td> -->
+                            <td>${{parseFloat(value.price).toFixed(2)}}</td>
                             <td>${{parseFloat(value.marketPrice).toFixed(2)}}</td>
-                            <td><amt>${{parseFloat(value.marketPrice * value.quantity).toFixed(2)}}</amt></td>
+                            <td><value>${{parseFloat(value.marketPrice * value.quantity).toFixed(2)}}</value></td>
                             <td :style="'color: ' + (percentageChange > 0 ? 'green' : 'red')">{{PnL}}%</td>
                         </tr>
                     </tbody>
@@ -83,6 +88,7 @@ export default {
             stock_symbols: [],
             stock_quantity: [],
             stock_price: [],
+            stockorder_arr:[],
             searchQuery: "",
 
             success:false
@@ -155,7 +161,29 @@ export default {
                     }
                 }
             })
-
+            
+            // Get Stock Orders
+            headerObj["serviceName"] = "getStockOrders"           
+            var header2 = JSON.stringify(headerObj); 
+            
+            this.axios.post("http://tbankonline.com/SMUtBank_API/Gateway?Header="+header2).then((response)=>{
+                var data = response.data.Content.ServiceResponse
+                var errorcode = data.ServiceRespHeader.GlobalErrorID
+                // console.log(data)
+                if(errorcode == "010000")
+                {
+                    this.stockorder_arr = data.StockOrderList.StockOrder
+                    console.log(this.stockorder_arr)
+                }
+                else
+                {
+                    this.modalActive = true
+                    this.modalMessage = data.ServiceRespHeader.ErrorDetails
+                    this.loading=false
+                }
+            })
+            
+            
         }).catch((error)=>{
             this.modalActive = true
             this.modalMessage = error
@@ -172,42 +200,6 @@ export default {
         PurchaseStock() {
             this.$router.push({ name: "BuySellStocks"});
         },
-        // currentPrice(symbol){
-        //     // this.loading = true
-        //     var headerObj = this.$store.state.headerObj
-        //     headerObj["serviceName"] = "getStockPrice"
-        //     var contentObj = {
-        //             Content:{
-        //                 "symbol" : symbol
-        //             }
-        //         }
-
-        //     var header = JSON.stringify(headerObj); 
-        //     var content = JSON.stringify(contentObj); 
-
-        //     this.axios.post("http://tbankonline.com/SMUtBank_API/Gateway?Header="+header+"&Content="+content).then((response)=>{
-        //         var data = response.data.Content.ServiceResponse
-        //         var errorcode = data.ServiceRespHeader.GlobalErrorID
-        //         var price = response.data.Content.Stock_Details.price
-        //         console.log(data)
-        //         console.log(price)
-        //         if(errorcode == "010000")
-        //         {
-        //             return price
-        //         }else{
-        //             // this.modalActive = true
-        //             // this.modalMessage = data.ServiceRespHeader.ErrorDetails
-        //             // this.success = false;
-        //             return 0
-        //         }
-
-        //     // }).catch((error)=>{
-        //     //     this.modalActive = true
-        //     //     this.modalMessage = error
-        //     // }).finally(()=>{
-        //     //     this.loading = false
-        //     });
-            // },
         },
 
     computed:{
@@ -231,10 +223,27 @@ export default {
             var closed_price = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.prevClose * item.quantity), 0)
             var totalHoldingValue = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.marketPrice * item.quantity), 0)
             var change = ((totalHoldingValue - closed_price)/closed_price)*100
-            // if (change >= 0){
-                
-            // }
             return change
+        },
+
+        total_stockpnl(){
+            var total_bought = this.stockorder_arr.reduce(function(acc, item){
+                if (item.order_status =="Filled" & item.buy_or_sell == "buy") acc += parseFloat(item.price_at_execution * item.quantity); return acc}, 0);
+            var total_sold = this.stockorder_arr.reduce(function(acc, item){
+                if (item.order_status =="Filled" & item.buy_or_sell == "sell") acc += parseFloat(item.price_at_execution * item.quantity); return acc}, 0);
+            var totalHoldingValue = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.marketPrice * item.quantity), 0)
+            var net_invested = total_bought - total_sold
+            return ((totalHoldingValue - net_invested)/net_invested)*100
+        },
+
+        cumulative(){
+            var total_bought = this.stockorder_arr.reduce(function(acc, item){
+                if (item.order_status =="Filled" & item.buy_or_sell == "buy") acc += parseFloat(item.price_at_execution * item.quantity); return acc}, 0);
+            var total_sold = this.stockorder_arr.reduce(function(acc, item){
+                if (item.order_status =="Filled" & item.buy_or_sell == "sell") acc += parseFloat(item.price_at_execution * item.quantity); return acc}, 0);
+            var totalHoldingValue = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.marketPrice * item.quantity), 0)
+            var net_invested = total_bought - total_sold
+            return totalHoldingValue - net_invested
         }
 
     }
@@ -252,6 +261,11 @@ h5 {
 amt{
     color: var(--purple);
     font-size: larger;
+}
+
+value{
+    color: var(--purple);
+    font-weight: 600;
 }
 
 faded {
