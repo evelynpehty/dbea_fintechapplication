@@ -10,13 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.js"
-import { faCircleXmark, faEnvelope, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCircleXmark, faEnvelope, faUser, faXmark, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 // Adding icons to the library
 library.add(faCircleXmark)
 library.add(faEnvelope)
 library.add(faUser)
 library.add(faXmark)
+library.add(faCircleInfo)
 
 
 
