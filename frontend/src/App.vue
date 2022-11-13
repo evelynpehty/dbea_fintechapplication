@@ -29,26 +29,38 @@ computed:{
 
 <style>
 @font-face {
-font-family: "ShareFontRegular";
-src: url("assets/fonts/share.regular.ttf");
+font-family: "ProductSansRegular";
+src: url("assets/fonts/Product-Sans-Regular.ttf");
 }
 
 @font-face {
-font-family: "ShareFontItalic";
-src: url("assets/fonts/share.italic.ttf");
+font-family: "ProductSansBold";
+src: url("assets/fonts/Product-Sans-Bold.ttf");
 }
 
 @font-face {
-font-family: "ShareFontBold";
-src: url("assets/fonts/share.bold.ttf");
+font-family: "ProductSansItalic";
+src: url("assets/fonts/Product-Sans-Italic.ttf");
+}
+
+@font-face {
+font-family: "ProductSansBoldItalic";
+src: url("assets/fonts/Product-Sans-Bold-Italic.ttf");
+}
+
+:root {
+  --purple: #6018F1;
+  --light-purple: #EBE4FD;
+  --blue : #5FD4E1;
+  --white: #ffffff;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'ShareFontBold', Arial, sans-serif !important;
-  color: #000080;
+  font-family: 'ProductSansBold', Arial, sans-serif !important;
+  color: var(--purple);
 }
 thead{
-    background-color: #000080
+    background-color: var(--purple)
 }
 th{
     color:white
@@ -56,7 +68,7 @@ th{
 
 
 div {
-  font-family: 'ShareFontRegular', Arial, Helvetica, sans-serif;
+  font-family: 'ProductSansRegular', Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -65,23 +77,23 @@ body {
 
 
 .btn-success {
-  background-color: #000080 !important;
-  border-color: #000080 !important;
+  background-color: var(--purple) !important;
+  border-color: var(--purple) !important;
 }
 
 .btn-outline-success {
-  color: #000080 !important;
-  border: 1px solid #000080 !important
+  color: var(--purple) !important;
+  border: 1px solid var(--purple) !important
 }
 
 .btn-outline-success:hover {
   color: white !important;
-  background-color: #000080 !important;
+  background-color: var(--purple) !important;
 }
 
 .input-group-text {
   background-color: #afafef !important;
-  color: #000080 !important;
+  color: var(--purple) !important;
 }
 
 .input-border-color {
@@ -99,7 +111,7 @@ body {
 }
 
 .multiselect__tag {
-  background: #000080 !important;
+  background: var(--purple) !important;
 }
 
 .multiselect__option--highlight {

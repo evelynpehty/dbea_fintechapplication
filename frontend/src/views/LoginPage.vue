@@ -9,9 +9,9 @@
     
               <div class="row g-0">
     
-                <div class="col-md-6 col-lg-5 d-none d-md-block my-auto">
+                <div class="col-md-6 col-lg-5 d-none d-md-block my-auto p-5">
                   <img
-                    src="../assets/logo.png"
+                    src="../assets/Simplifi.png"
                     alt="login"
                     class="img-fluid" style="border-radius: 1rem 0 0 1rem;"
                   />

@@ -4,11 +4,12 @@ import LoginPage from '../views/LoginPage.vue'
 import UserMain from '../views/UserMain.vue'
 import ViewCustomerStocks from '../views/ViewCustomerStocks.vue'
 import BuySellStocks from '../views/BuySellStocks.vue'
-import PortfolioOptimization from '../views/PortfolioOptimization.vue'
+import ManagePortfolio from '../views/ManagePortfolio.vue'
+import PortfolioEvaluation from '../views/PortfolioEvaluation.vue'
 import CustomerProfile from '../views/CustomerProfile.vue'
 import ViewStockOrder from '../views/ViewStockOrder.vue'
-
 import StockNews from '../views/StockNews.vue'
+import OurTeam from '../views/OurTeam.vue'
 
 const routes = [
   {
@@ -65,12 +66,23 @@ const routes = [
       requiresAuth: false,
     }
   },
+
   {
-    path: "/PortfolioOptimization",
-    name: "PortfolioOptimization",
-    component: PortfolioOptimization,
+    path: "/ManagePortfolio",
+    name: "ManagePortfolio",
+    component: ManagePortfolio,
     meta: {
-      title: "PortfolioOptimization",
+      title: "ManagePortfolio",
+      requiresAuth: false,
+    }
+  },
+
+  {
+    path: "/PortfolioEvaluation/:portfolioid",
+    name: "PortfolioEvaluation",
+    component: PortfolioEvaluation,
+    meta: {
+      title: "PortfolioEvaluation",
       requiresAuth: false,
     }
   },
@@ -84,12 +96,23 @@ const routes = [
       requiresAuth: false,
     }
   },
+  
   {
     path: "/StockNews",
     name: "StockNews",
     component: StockNews,
     meta: {
       title: "StockNews",
+      requiresAuth: false,
+    }
+  },
+  
+  {
+    path: "/OurTeam",
+    name: "OurTeam",
+    component: OurTeam,
+    meta: {
+      title: "OurTeam",
       requiresAuth: false,
     }
   },

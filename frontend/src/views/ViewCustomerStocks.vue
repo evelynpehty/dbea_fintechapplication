@@ -87,7 +87,6 @@ export default {
             if(errorcode == "010000")
             {
                 var stock_arr = data.DepositoryList.Depository
-                
                 if(Array.isArray(stock_arr)){
                     for(var s of stock_arr){
                         //display stocks with quantity that is not 0 

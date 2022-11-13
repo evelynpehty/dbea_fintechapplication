@@ -3,10 +3,11 @@
 ## backend
 1. cd backend
 2. python -m pip install Flask
-3. python -m pip install Flask-Cors
-4. python -m pip install PyPortfolioOpt
-5. python -m pip install pandas-datareader
-2. python api.py
+3. python -m pip install yFinance
+4. python -m pip install Flask-Cors
+5. python -m pip install PyPortfolioOpt
+6. python -m pip install pandas-datareader
+7. python api.py
 
 ## frontend
 1. cd frontend
@@ -15,7 +16,7 @@
 4. npm run serve
 
 ## login credentials [in case you forget your account credentials, you can use mine)
-- userid: eveyln
+- userid: evelynpeh
 - pin: 123123
 - otp: 999999
 
