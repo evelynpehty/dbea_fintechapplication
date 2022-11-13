@@ -14,7 +14,7 @@
               <a class="nav-link dropdown-toggle mx-3" href="#" role="button" data-bs-toggle="dropdown">Stocks</a>
               <ul class="dropdown-menu mx-3">
                 <li><a class="dropdown-item" href="/ViewCustomerStocks">My Stocks</a></li>
-                <li><a class="dropdown-item" href="/ViewStockOrder">My Stocks Order</a></li>
+                <li><a class="dropdown-item" href="/ViewStockOrder">My Stocks Orders</a></li>
               </ul>
             </li>
             <li class="nav-item">

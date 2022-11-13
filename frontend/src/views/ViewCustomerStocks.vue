@@ -50,11 +50,17 @@
                     </tbody>
                 </table>
             </div>
+            <div class="col-lg-12 text-center my-4">
+                <button type="redirect" class="btn btn-success p-2">
+                    <a class="nav-link mx-2" href="/ManagePortfolio">Optimise Portfolio</a>
+                </button>
+            </div>
+            
         </div>
     </div>
 
 </template>
-  
+
 <script>
 import Loading from "../components/Loading";
 import Modal from "../components/Modal";
@@ -147,8 +153,8 @@ export default {
 <style ang="scss" scoped>
 
 h5 {
-  font-family: 'ProductSansBold', Arial, sans-serif !important;
-  color: black;
+font-family: 'ProductSansBold', Arial, sans-serif !important;
+color: black;
 }
 
 amt{
