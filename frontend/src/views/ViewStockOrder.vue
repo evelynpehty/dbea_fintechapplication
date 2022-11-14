@@ -126,7 +126,7 @@ export default {
     methods:{
         closeModal() {
             this.modalActive = false
-            if(this.relad){
+            if(this.reload){
                 location.reload()
             }
         },
