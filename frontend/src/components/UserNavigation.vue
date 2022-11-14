@@ -10,6 +10,9 @@
             <li class="nav-item">
               <a class="nav-link mx-2" href="/UserMain">Home</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link mx-2" href="/StockNews">News</a>
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle mx-3" href="#" role="button" data-bs-toggle="dropdown">Stocks</a>
               <ul class="dropdown-menu mx-3">
