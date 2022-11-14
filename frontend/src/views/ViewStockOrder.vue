@@ -38,11 +38,8 @@
                     <th scope="col">Symbol</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Buy/Sell</th>
-                    <th scope="col">Initial Spot Price</th>
                     <th scope="col">Price at Execution</th>
                     <th scope="col">Price at Order</th>
-                    <th scope="col">Maturity Date</th>
-                    <th scope="col">Expiration Type</th>
                     <th scope="col">Order Status</th>
                     <th v-if="currentstatus == 'Open'" scope="col">Cancel</th>
                     </tr>
@@ -55,11 +52,8 @@
                         <td>{{value.stockSymbol}}</td>
                         <td>{{value.quantity}}</td>
                         <td>{{value.buy_or_sell}}</td>
-                        <td>{{formatNumber(value.initial_spot_price)}}</td>
                         <td>{{formatNumber(value.price_at_execution)}}</td>
                         <td>{{formatNumber(value.price_at_order)}}</td>
-                        <td>{{value.maturity_date}}</td>
-                        <td>{{value.expiration_type}}</td>
                         <td>{{value.order_status}}</td>
                         <td v-if="currentstatus == 'Open'"><font-awesome-icon v-if="value.order_status == 'Open'" @click="openModal(value.orderID)" class="mx-auto fa-2x" style="color: red" icon="fa-solid fa-xmark" /></td>
                     </tr>
