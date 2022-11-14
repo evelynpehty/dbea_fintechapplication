@@ -14,7 +14,7 @@
             <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (percentageChange >= 0 ? 'green' : 'red')">{{percentageChange.toFixed(2)}}%</display><faded class="mx-2">1D Change</faded></h5>
             <!-- <h5 class="title my-4 col-sm-6" >Total Invested: <amt>${{totalPurchasedValue}}</amt></h5> -->
         </div>
-        <div class="col-12 mb-4">
+        <!-- <div class="col-12 mb-4">
                 <div class="p-4 border rounded bg-light">
                     <h5>Current Asset Distribution</h5>
                     <Bar
@@ -29,7 +29,7 @@
                     :height="height"
                     />
                 </div>
-            </div>
+            </div> -->
 
         <div class="row mt-5" v-if="customerStocksArr.length == 0">
             <div class="col-md-3"></div>
@@ -73,7 +73,7 @@
                             <td>${{parseFloat(stock_computed[value.symbol].average_cost).toFixed(2)}}</td>
                             <td>${{parseFloat(value.marketPrice).toFixed(2)}}</td>
                             <td><value>${{parseFloat(value.marketPrice * value.quantity).toFixed(2)}}</value></td>
-                            <td :style="'color: ' + (parseFloat( (value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty)).toFixed(2) >= 0 ? 'green' : 'red')">${{parseFloat( (value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty)).toFixed(2)}}</td>
+                            <td :style="'color: ' + (parseFloat( (value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty)).toFixed(2) >= 0 ? 'green' : 'red')"><pnl>${{parseFloat( (value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty)).toFixed(2)}}</pnl></td>
                             <td :style="'color: ' + (((value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty))/ (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty) * 100 >= 0 ? 'green' : 'red')">{{parseFloat( ((value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty))/ (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty) * 100).toFixed(2)}}%</td>
                         </tr>
                     </tbody>
@@ -94,45 +94,49 @@
 
 import Loading from "../components/Loading";
 import Modal from "../components/Modal";
-import { Bar } from 'vue-chartjs';
-import { Chart as ChartJS, Title, Tooltip, BarElement, CategoryScale, LinearScale } from 'chart.js';
+// import { Bar } from 'vue-chartjs';
+// import { Chart as ChartJS, Title, Tooltip, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
-ChartJS.register(Title, Tooltip, BarElement, CategoryScale, LinearScale)
+// ChartJS.register(Title, Tooltip, BarElement, CategoryScale, LinearScale)
 
 export default {
     name: "ViewCustomerStocks",
-    components: {Loading, Modal, Bar},
-
-    props: {
-        chartId: {
-            type: String,
-            default: "bar-chart"
-        },
-        datasetIdKey: {
-            type: String,
-            default: "label"
-        },
-        width: {
-            type: Number,
-            default: 400
-        },
-        height: {
-            type: Number,
-            default: 200
-        },
-        cssClasses: {
-            default: "",
-            type: String
-        },
-        styles: {
-            type: Object,
-            default: () => {}
-        },
-        plugins: {
-            type: Object,
-            default: () => {}
-        }
+    components: {
+        Loading, 
+        Modal, 
+        // Bar
     },
+
+    // props: {
+    //     chartId: {
+    //         type: String,
+    //         default: "bar-chart"
+    //     },
+    //     datasetIdKey: {
+    //         type: String,
+    //         default: "label"
+    //     },
+    //     width: {
+    //         type: Number,
+    //         default: 400
+    //     },
+    //     height: {
+    //         type: Number,
+    //         default: 200
+    //     },
+    //     cssClasses: {
+    //         default: "",
+    //         type: String
+    //     },
+    //     styles: {
+    //         type: Object,
+    //         default: () => {}
+    //     },
+    //     plugins: {
+    //         type: Object,
+    //         default: () => {}
+    //     }
+    // },
 
     data() {
         return {
@@ -160,31 +164,31 @@ export default {
             success:false,
 
             // Chart Data
-            chartData: {
-                labels: [],
-                datasets: [ 
-                    { 
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 205, 86, 0.2)', 'rgba(75, 192, 192, 0.2)',
-                            'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(201, 203, 207, 0.2)', 'rgba(59, 60, 54, 0.2)',
-                            'rgba(197, 29, 52, 0.2)', 'rgba(106, 93, 77, 0.2)', 'rgba(255, 35, 1, 0.2)', 'rgba(37, 41, 74, 0.2)',
-                            'rgba(117, 92, 72, 0.2)', 'rgba(137, 58, 61, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132)', 'rgba(255, 159, 64)', 'rgba(255, 205, 86)', 'rgba(75, 192, 192)',
-                            'rgba(54, 162, 235)', 'rgba(153, 102, 255)', 'rgba(201, 203, 207)', 'rgba(59, 60, 54)', 
-                            'rgba(197, 29, 52)', 'rgba(106, 93, 77)', 'rgba(255, 35, 1)', 'rgba(37, 41, 74)',
-                            'rgba(117, 92, 72)', 'rgba(137, 58, 61)',
-                        ],
-                        borderWidth: 1,
-                        data: []
-                    } 
-                ]
-            },
+            // chartData: {
+            //     labels: [],
+            //     datasets: [ 
+            //         { 
+            //             backgroundColor: [
+            //                 'rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 205, 86, 0.2)', 'rgba(75, 192, 192, 0.2)',
+            //                 'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(201, 203, 207, 0.2)', 'rgba(59, 60, 54, 0.2)',
+            //                 'rgba(197, 29, 52, 0.2)', 'rgba(106, 93, 77, 0.2)', 'rgba(255, 35, 1, 0.2)', 'rgba(37, 41, 74, 0.2)',
+            //                 'rgba(117, 92, 72, 0.2)', 'rgba(137, 58, 61, 0.2)'
+            //             ],
+            //             borderColor: [
+            //                 'rgba(255, 99, 132)', 'rgba(255, 159, 64)', 'rgba(255, 205, 86)', 'rgba(75, 192, 192)',
+            //                 'rgba(54, 162, 235)', 'rgba(153, 102, 255)', 'rgba(201, 203, 207)', 'rgba(59, 60, 54)', 
+            //                 'rgba(197, 29, 52)', 'rgba(106, 93, 77)', 'rgba(255, 35, 1)', 'rgba(37, 41, 74)',
+            //                 'rgba(117, 92, 72)', 'rgba(137, 58, 61)',
+            //             ],
+            //             borderWidth: 1,
+            //             data: []
+            //         } 
+            //     ]
+            // },
 
-            chartOptions: {
-                responsive: true
-            },
+            // chartOptions: {
+            //     responsive: true
+            // },
         };
     },
     created(){
@@ -202,17 +206,20 @@ export default {
                 var stock_arr = data.DepositoryList.Depository
                 if(Array.isArray(stock_arr)){
                     for(var s of stock_arr){
+                        console.log(s.quantity)
                         //append stocks with quantity that is not 0 to customerStocksArr
                         if(s.quantity !=0 ){
                             this.customerStocksArr.push(s)
                             this.stock_symbols.push(s.symbol)
                             this.stock_quantity.push(s.quantity)
+                            // this.chartData.labels.push(s.symbol)
+                            // this.chartData.datasets[0].data.push(s.quantity)
                             this.stock_price.push(s.price)
                         }
                     }
-                    this.chartData.labels = this.stock_symbols
-                    this.chartData.datasets[0].data = this.stock_quantity
-
+                    // // this.chartData.labels = this.stock_symbols
+                    // // this.chartData.datasets[0].data = this.stock_quantity
+                    
                 }else{
                     if(stock_arr.quantity != 0)
                     {
@@ -226,7 +233,7 @@ export default {
                 this.modalMessage = data.ServiceRespHeader.ErrorDetails
                 this.success = false;
             }
-
+            
             // Get Stock Prices 
             headerObj["serviceName"] = "getStockPrice"           
             var header = JSON.stringify(headerObj);
@@ -266,11 +273,11 @@ export default {
                 if(errorcode == "010000")
                 {
                     this.stockorder_arr = data.StockOrderList.StockOrder
-                    console.log(this.stockorder_arr)
+                    // console.log(this.stockorder_arr)
                     for (var order of this.stockorder_arr){
-                        console.log(order.stockSymbol)
+                        // console.log(order.stockSymbol)
                         for (var symbol of this.stock_symbols){
-                            console.log(symbol)
+                            // console.log(symbol)
                                 if (order.stockSymbol == symbol & order.buy_or_sell != "sell" & order.order_status == "Filled"){
                                     // console.log(order.stockSymbol)
                                     if (this.stock_computed[symbol]){
@@ -298,7 +305,6 @@ export default {
                     this.loading=false
                 }
             })
-            
             
         }).catch((error)=>{
             this.modalActive = true
@@ -365,6 +371,7 @@ export default {
     }
 }   
 
+
 </script>
 
 <style ang="scss" scoped>
@@ -381,6 +388,10 @@ amt{
 
 value{
     color: var(--purple);
+    font-weight: 600;
+}
+
+pnl{
     font-weight: 600;
 }
 
