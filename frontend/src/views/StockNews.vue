@@ -2,8 +2,8 @@
     <Loading v-show="loading" />
     <Modal v-if="modalActive" :modalMessage="modalMessage" v-on:close-modal="closeModal"/>
     
-    <div class="container">
-        <div class="row" style="margin-top:20px">
+    <div class="container my-5">
+        <div class="row">
             <h2 class="title">Stock News</h2>
         </div>
 
