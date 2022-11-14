@@ -39,13 +39,8 @@ export default {
 }
 </script>
 
-<<<<<<< Updated upstream
-<style>
-
-=======
 <style lang="scss" scoped>
 h1 {
   color: white !important;
 }
->>>>>>> Stashed changes
 </style>
