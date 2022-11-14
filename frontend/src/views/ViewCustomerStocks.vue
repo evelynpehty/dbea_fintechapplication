@@ -14,6 +14,22 @@
             <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (percentageChange >= 0 ? 'green' : 'red')">{{percentageChange.toFixed(2)}}%</display><faded class="mx-2">1D Change</faded></h5>
             <!-- <h5 class="title my-4 col-sm-6" >Total Invested: <amt>${{totalPurchasedValue}}</amt></h5> -->
         </div>
+        <div class="col-12 mb-4">
+                <div class="p-4 border rounded bg-light">
+                    <h5>Current Asset Distribution</h5>
+                    <Bar
+                    :chart-options="chartOptions"
+                    :chart-data="chartData"
+                    :chart-id="chartId"
+                    :dataset-id-key="datasetIdKey"
+                    :plugins="plugins"
+                    :css-classes="cssClasses"
+                    :styles="styles"
+                    :width="width"
+                    :height="height"
+                    />
+                </div>
+            </div>
 
         <div class="row mt-5" v-if="customerStocksArr.length == 0">
             <div class="col-md-3"></div>
@@ -25,7 +41,7 @@
         </div>
 
         <div v-else>
-            <div class="row" tyle="margin-top:20px">
+            <div class="row col-12 mx-auto " tyle="margin-top:20px">
                 <input type="text" class="form-control form-control-md input-border-color" placeholder="Search..." id="search" v-model="searchQuery"/>
             </div>
             <div class="row mt-5" v-if="filterStocks.length == 0">
@@ -37,7 +53,7 @@
                 <div class="col-md-3"></div>
             </div>
 
-            <div v-else class="row" style="margin-top:20px">
+            <div v-else class="row col-12 mx-auto" style="margin-top:20px">
                 <table class="table table-bordered table-md">
                     <thead class="text-center">
                         <tr>
@@ -75,12 +91,49 @@
 </template>
 
 <script>
-// import { stringify } from "querystring";
+
 import Loading from "../components/Loading";
 import Modal from "../components/Modal";
+import { Bar } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, BarElement, CategoryScale, LinearScale } from 'chart.js';
+
+ChartJS.register(Title, Tooltip, BarElement, CategoryScale, LinearScale)
+
 export default {
     name: "ViewCustomerStocks",
-    components: {Loading, Modal},
+    components: {Loading, Modal, Bar},
+
+    props: {
+        chartId: {
+            type: String,
+            default: "bar-chart"
+        },
+        datasetIdKey: {
+            type: String,
+            default: "label"
+        },
+        width: {
+            type: Number,
+            default: 400
+        },
+        height: {
+            type: Number,
+            default: 200
+        },
+        cssClasses: {
+            default: "",
+            type: String
+        },
+        styles: {
+            type: Object,
+            default: () => {}
+        },
+        plugins: {
+            type: Object,
+            default: () => {}
+        }
+    },
+
     data() {
         return {
             loading: null,
@@ -104,8 +157,34 @@ export default {
                 //     average_cost:null
                 // }
             },
+            success:false,
 
-            success:false
+            // Chart Data
+            chartData: {
+                labels: [],
+                datasets: [ 
+                    { 
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 205, 86, 0.2)', 'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(201, 203, 207, 0.2)', 'rgba(59, 60, 54, 0.2)',
+                            'rgba(197, 29, 52, 0.2)', 'rgba(106, 93, 77, 0.2)', 'rgba(255, 35, 1, 0.2)', 'rgba(37, 41, 74, 0.2)',
+                            'rgba(117, 92, 72, 0.2)', 'rgba(137, 58, 61, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132)', 'rgba(255, 159, 64)', 'rgba(255, 205, 86)', 'rgba(75, 192, 192)',
+                            'rgba(54, 162, 235)', 'rgba(153, 102, 255)', 'rgba(201, 203, 207)', 'rgba(59, 60, 54)', 
+                            'rgba(197, 29, 52)', 'rgba(106, 93, 77)', 'rgba(255, 35, 1)', 'rgba(37, 41, 74)',
+                            'rgba(117, 92, 72)', 'rgba(137, 58, 61)',
+                        ],
+                        borderWidth: 1,
+                        data: []
+                    } 
+                ]
+            },
+
+            chartOptions: {
+                responsive: true
+            },
         };
     },
     created(){
@@ -131,9 +210,9 @@ export default {
                             this.stock_price.push(s.price)
                         }
                     }
-                    // this.chartData.labels = this.stock_symbols
-                    // this.newChartData.labels = this.stock_symbols
-                    // this.chartData.datasets[0].data = this.stock_quantity
+                    this.chartData.labels = this.stock_symbols
+                    this.chartData.datasets[0].data = this.stock_quantity
+
                 }else{
                     if(stock_arr.quantity != 0)
                     {
