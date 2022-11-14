@@ -9,9 +9,9 @@
             <h2 class="title"><amt>${{totalHoldingValue}}</amt></h2>
         </div>
         <div class="row">
-            <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (cumulative > 0 ? 'green' : 'red')">${{cumulative.toFixed(2)}}</display><faded class="mx-2">Cumulative P/L</faded></h5>
-            <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (total_stockpnl > 0 ? 'green' : 'red')">{{total_stockpnl.toFixed(2)}}%</display><faded class="mx-2">All Time</faded></h5>
-            <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (percentageChange > 0 ? 'green' : 'red')">{{percentageChange.toFixed(2)}}%</display><faded class="mx-2">1D Change</faded></h5>
+            <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (cumulative >= 0 ? 'green' : 'red')">${{cumulative.toFixed(2)}}</display><faded class="mx-2">Cumulative P/L</faded></h5>
+            <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (total_stockpnl >= 0 ? 'green' : 'red')">{{total_stockpnl.toFixed(2)}}%</display><faded class="mx-2">All Time</faded></h5>
+            <h5 class="mb-4 col-sm-4"><display :style="'color: ' + (percentageChange >= 0 ? 'green' : 'red')">{{percentageChange.toFixed(2)}}%</display><faded class="mx-2">1D Change</faded></h5>
             <!-- <h5 class="title my-4 col-sm-6" >Total Invested: <amt>${{totalPurchasedValue}}</amt></h5> -->
         </div>
 
@@ -47,6 +47,7 @@
                         <th scope="col">Current Price</th>
                         <th scope="col">Current Total Value</th>
                         <th scope="col">Profit/Loss</th>
+                        <th scope="col">Profit/Loss (%)</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
@@ -56,7 +57,8 @@
                             <td>${{parseFloat(stock_computed[value.symbol].average_cost).toFixed(2)}}</td>
                             <td>${{parseFloat(value.marketPrice).toFixed(2)}}</td>
                             <td><value>${{parseFloat(value.marketPrice * value.quantity).toFixed(2)}}</value></td>
-                            <td :style="'color: ' + (percentageChange > 0 ? 'green' : 'red')">{{}}%</td>
+                            <td :style="'color: ' + (parseFloat( (value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty)).toFixed(2) >= 0 ? 'green' : 'red')">${{parseFloat( (value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty)).toFixed(2)}}</td>
+                            <td :style="'color: ' + (((value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty))/ (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty) * 100 >= 0 ? 'green' : 'red')">{{parseFloat( ((value.marketPrice * stock_computed[value.symbol].total_qty) - (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty))/ (stock_computed[value.symbol].average_cost * stock_computed[value.symbol].total_qty) * 100).toFixed(2)}}%</td>
                         </tr>
                     </tbody>
                 </table>
