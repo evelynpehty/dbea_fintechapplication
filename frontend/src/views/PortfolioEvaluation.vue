@@ -110,7 +110,6 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Symbol</th>
                                 <th scope="col">Market Price</th>
-                                <th scope="col">Last Price</th>
                                 <th scope="col">Current Quantity</th>
                                 <th scope="col">New Quantity</th>
                                 </tr>
@@ -119,7 +118,6 @@
                                 <tr v-for="(value,key) in this.customerStocksArr" :key="key" >
                                     <td>{{ key + 1 }}</td>
                                     <td>{{value.symbol}}</td>
-                                    <td>${{value.price}}</td>
                                     <td>${{value.marketPrice}}</td>
                                     <td>{{value.quantity}}</td>
                                     <td>{{value.newQuantity}}</td>
@@ -194,6 +192,7 @@ export default {
             stock_symbols: [],
             stock_quantity: [],
             stock_price: [],
+            market_price: [],
             new_stock_quantity: [],
 
             start_date: "",
@@ -343,6 +342,7 @@ export default {
                     if (errorcode == "010000"){
                         this.customerStocksArr[r]["prevClose"] = responses[r].data.Content.ServiceResponse.Stock_Details.prevClose
                         this.customerStocksArr[r]["marketPrice"] = responses[r].data.Content.ServiceResponse.Stock_Details.price
+                        this.market_price.push(responses[r].data.Content.ServiceResponse.Stock_Details.price)
                     }
                 }
             })
@@ -373,7 +373,7 @@ export default {
                     this.sharpe_ratio = this.SuggestedPortfolio.performance.sharpe_ratio
                     this.cleaned_weights = this.SuggestedPortfolio.cleaned_weights
                     for (var x in this.customerStocksArr) {
-                        this.customerStocksArr[x]["newQuantity"] = parseFloat((this.totalAmount * this.cleaned_weights[this.customerStocksArr[x].symbol]) / this.customerStocksArr[x].price ).toFixed(2)
+                        this.customerStocksArr[x]["newQuantity"] = parseFloat((this.totalAmount * this.cleaned_weights[this.customerStocksArr[x].symbol]) / this.customerStocksArr[x].price ).toFixed(0)
                     }
 
                     if (Array.isArray(this.customerStocksArr)) {
@@ -399,7 +399,7 @@ export default {
                     this.sharpe_ratio = this.SuggestedPortfolio.performance.sharpe_ratio
                     this.cleaned_weights = this.SuggestedPortfolio.cleaned_weights
                     for (var x in this.customerStocksArr) {
-                        this.customerStocksArr[x]["newQuantity"] = parseFloat((this.totalAmount * this.cleaned_weights[this.customerStocksArr[x].symbol]) / this.customerStocksArr[x].price ).toFixed(2)
+                        this.customerStocksArr[x]["newQuantity"] = parseFloat((this.totalAmount * this.cleaned_weights[this.customerStocksArr[x].symbol]) / this.customerStocksArr[x].price ).toFixed(0)
                     }
 
                     if (Array.isArray(this.customerStocksArr)) {
@@ -425,7 +425,7 @@ export default {
                     this.sharpe_ratio = this.SuggestedPortfolio.performance.sharpe_ratio
                     this.cleaned_weights = this.SuggestedPortfolio.cleaned_weights
                     for (var x in this.customerStocksArr) {
-                        this.customerStocksArr[x]["newQuantity"] = parseFloat((this.totalAmount * this.cleaned_weights[this.customerStocksArr[x].symbol]) / this.customerStocksArr[x].price ).toFixed(2)
+                        this.customerStocksArr[x]["newQuantity"] = parseFloat((this.totalAmount * this.cleaned_weights[this.customerStocksArr[x].symbol]) / this.customerStocksArr[x].price ).toFixed(0)
                     }
 
                     if (Array.isArray(this.customerStocksArr)) {
@@ -446,8 +446,8 @@ export default {
     computed: {
         totalAmount() {
             var total = 0
-            for (var i in this.stock_price) {
-                total += this.stock_price[i] * this.stock_quantity[i]
+            for (var i in this.market_price) {
+                total += this.market_price[i] * this.stock_quantity[i]
             }
             return parseFloat(total).toFixed(2)
         }
