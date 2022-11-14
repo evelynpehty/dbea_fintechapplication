@@ -3,7 +3,6 @@
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -11,13 +10,6 @@
           <div class="carousel-caption d-none d-md-block">
             <h1>Trading has never been easier</h1>
             <p>Start trading with us now</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img src="../assets/banner.jpg" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-none d-md-block">
-            <h5>Second slide label</h5>
-            <p>Some representative placeholder content for the second slide.</p>
           </div>
         </div>
       </div>
@@ -35,10 +27,10 @@
       <div class="row my-5">
         <div class="col-md-6 ps-5 my-auto d-block about">
           <h1>About Us</h1>
-          <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dictum mauris mollis, ullamcorper magna rhoncus, ullamcorper lacus. Etiam enim libero, rutrum eget commodo sit amet, sollicitudin et lorem. Cras placerat tortor erat, at convallis massa malesuada quis. Duis nec eleifend sapien. Pellentesque ultricies risus ac ex feugiat dictum. Nulla feugiat enim ac eros ultrices pharetra. Quisque tempor urna tellus, ut iaculis diam lobortis sit amet.</h5>
+          <h5>SimpliFi is a trading platform that offers easy-to-use interfaces where investors can purchase and sell stocks. Beyond that, it includes features that enable investors to make well-informed decisions about their investments, such as real-time quotes, business and financial news feeds, as well as technical analysis tools which provide investors with suggestions on how they can optimise their current portfolio.</h5>
         </div>
         <div class="col-md-6">
-          <img src="../assets/about-us.jpg" class="rounded mx-auto d-block" alt="..." />
+          <img src="../assets/about-us.jpg" class="rounded mx-auto d-block img-fluid" alt="..." />
         </div>
       </div>
     </div>
