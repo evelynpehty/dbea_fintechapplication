@@ -53,10 +53,10 @@
                         <tr v-for="(value,key) in filterStocks" :key="key" >
                             <td><b>{{value.symbol}}</b></td>
                             <td>{{value.quantity}}</td>
-                            <td>${{parseFloat(value.price).toFixed(2)}}</td>
+                            <td>${{parseFloat(stock_computed[value.symbol].average_cost).toFixed(2)}}</td>
                             <td>${{parseFloat(value.marketPrice).toFixed(2)}}</td>
                             <td><value>${{parseFloat(value.marketPrice * value.quantity).toFixed(2)}}</value></td>
-                            <td :style="'color: ' + (percentageChange > 0 ? 'green' : 'red')">{{PnL}}%</td>
+                            <td :style="'color: ' + (percentageChange > 0 ? 'green' : 'red')">{{}}%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -73,6 +73,7 @@
 </template>
 
 <script>
+// import { stringify } from "querystring";
 import Loading from "../components/Loading";
 import Modal from "../components/Modal";
 export default {
@@ -89,7 +90,18 @@ export default {
             stock_quantity: [],
             stock_price: [],
             stockorder_arr:[],
+            stock_indiv_arr:[],
+            stock_total_cost:[],
+            stock_total_qty:[],
+            stock_average_cost:[],
             searchQuery: "",
+            stock_computed: {
+                // symbol:{
+                //     total_cost: null,
+                //     total_qty: null,
+                //     average_cost:null
+                // }
+            },
 
             success:false
         };
@@ -174,6 +186,29 @@ export default {
                 {
                     this.stockorder_arr = data.StockOrderList.StockOrder
                     console.log(this.stockorder_arr)
+                    for (var order of this.stockorder_arr){
+                        console.log(order.stockSymbol)
+                        for (var symbol of this.stock_symbols){
+                            console.log(symbol)
+                                if (order.stockSymbol == symbol & order.buy_or_sell != "sell" & order.order_status == "Filled"){
+                                    // console.log(order.stockSymbol)
+                                    if (this.stock_computed[symbol]){
+                                        console.log(this.stock_computed)
+                                        this.stock_computed[symbol].total_cost = parseFloat(this.stock_computed[symbol].total_cost) + parseFloat(order.price_at_execution)
+                                        this.stock_computed[symbol].total_qty = String(parseInt(this.stock_computed[symbol].total_qty) + parseInt(order.quantity))
+                                        this.stock_computed[symbol].average_cost = parseFloat((this.stock_computed[symbol].total_cost / this.stock_computed[symbol].total_qty))
+                                    }
+                                    else{
+                                        this.stock_computed[symbol] =
+                                        {
+                                        total_cost: order.price_at_execution * order.quantity,
+                                        total_qty: order.quantity,
+                                        average_cost: parseFloat( (order.price_at_execution * order.quantity) / order.quantity)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                 }
                 else
                 {
@@ -244,7 +279,7 @@ export default {
             var totalHoldingValue = this.customerStocksArr.reduce((acc, item) => acc + parseFloat(item.marketPrice * item.quantity), 0)
             var net_invested = total_bought - total_sold
             return totalHoldingValue - net_invested
-        }
+        },
 
     }
 }   
