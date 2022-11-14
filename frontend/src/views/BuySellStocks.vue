@@ -2,7 +2,7 @@
   <Loading v-show="loading" />
   <Modal v-if="modalActive" :modalMessage="modalMessage" :btnActive="btnActive" v-on:close-modal="closeModal" v-on:btn-yes="btnYes" v-on:btn-no="btnNo"/>
 
-  <div class="container-fluid">
+  <div class="container">
     <div class="row" style="margin-top:80px">
       <h2 class="title">Buy or Sell Stocks</h2>
       <p class="title">Please fill in the required fields to buy or sell stocks</p>
