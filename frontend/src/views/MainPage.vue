@@ -30,6 +30,20 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
+
+    <div id="about" class="container-fluid">
+      <div class="row my-5">
+        <div class="col-md-6 ps-5 my-auto d-block about">
+          <h1>About Us</h1>
+          <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dictum mauris mollis, ullamcorper magna rhoncus, ullamcorper lacus. Etiam enim libero, rutrum eget commodo sit amet, sollicitudin et lorem. Cras placerat tortor erat, at convallis massa malesuada quis. Duis nec eleifend sapien. Pellentesque ultricies risus ac ex feugiat dictum. Nulla feugiat enim ac eros ultrices pharetra. Quisque tempor urna tellus, ut iaculis diam lobortis sit amet.</h5>
+        </div>
+        <div class="col-md-6">
+          <img src="../assets/about-us.jpg" class="rounded mx-auto d-block" alt="..." />
+        </div>
+      </div>
+    </div>
+
+    <div id="contact" class="container-fluid"></div>
   </div>
 </template>
 
@@ -42,5 +56,9 @@ export default {
 <style lang="scss" scoped>
 h1 {
   color: white !important;
+}
+
+.about h1{
+  color: var(--purple) !important;
 }
 </style>
