@@ -369,7 +369,7 @@ export default {
       else{
         this.loading = false;
         this.btnActive=false;
-        this.modalMessage = "You only have " + owned + " stocks. That is insufficient!"   
+        this.modalMessage = "You do not own any of this company stock. You are unable to sell!"   
         this.modalActive = true 
       }
     },
