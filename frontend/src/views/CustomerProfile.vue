@@ -11,7 +11,7 @@
                 <p class="fs-3">Hello {{givenName}}</p>
                 <p class="fs-5">This is your profile page. You can change your details as needed here.</p>
 
-                <button class="btn btn-primary mt-3 mb-5 py-2 px-3" @click="editProfile()" :disabled="check_edit_btn">Edit profile</button>
+                <button class="btn btn-success mt-3 mb-5 py-2 px-3" @click="editProfile()" :disabled="check_edit_btn">Edit profile</button>
             </div>
         </div>
 
@@ -154,7 +154,7 @@
             </div>
 
             <div class="text-center mb-5">
-                <button class="btn btn-primary mx-3 px-5" type="button" @click="updateChanges()">Update Changes</button>
+                <button class="btn btn-success mx-3 px-5" type="button" @click="updateChanges()">Update Changes</button>
                 <button class="btn btn-outline-danger" type="button" @click="backbtn()">Cancel</button>
             </div>
             
