@@ -98,7 +98,7 @@
                 <input type="number" class="form-control form-control-md input-border-color" id="quantity" v-model="quantity" required>
             </div>
             <div class="col-6 mb-3">
-                <label for="buyorsell" class="form-label">Settlment Account</label>
+                <label for="buyorsell" class="form-label">Settlement Account</label>
                 <select class="form-select form-select-md input-border-color" v-model="settlementaccount" required>
                   <option v-for="value, key in this.customeraccount_arr" :key="key" :value="value.accountID">
                     {{value.accountID}} - {{value.currency+value.balance}}

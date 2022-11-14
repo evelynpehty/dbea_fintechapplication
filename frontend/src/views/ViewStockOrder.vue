@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <div class="container">
         <div class="row" style="margin-top:20px">
-            <h2 class="title">My Stock Order</h2>
+            <h2 class="title">My Stock Orders</h2>
         </div>
 
         <div class="row mt-5" v-if="stockorder_arr.length == 0">
