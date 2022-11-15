@@ -52,7 +52,7 @@
                                     </div>
                                     <div class="col-lg-6 mb-4">
                                         <label class="form-control-label" for="input-pin">PIN</label>
-                                        <input type="text" id="input-pin" class="form-control" placeholder="PIN" v-model=pin>
+                                        <input type="password" id="input-pin" class="form-control" placeholder="PIN" v-model=pin>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -327,7 +327,7 @@
 
                 age: 0,
                 check_edit_btn: false,
-                pin: '',
+                pin: this.$store.state.headerObj.PIN,
                 account_pin: '',
 
                 // Component item
