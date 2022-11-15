@@ -11,9 +11,6 @@
               <a class="nav-link mx-2" aria-current="page" href="/#about">About Us</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link mx-2" href="/#contact">Contact Us</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link mx-2" href="/OurTeam">Our Team</a>
             </li>
           </ul>
